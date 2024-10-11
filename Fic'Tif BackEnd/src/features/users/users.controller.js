@@ -23,7 +23,6 @@ const get = async (req, res) => {
 			userInfo = { ...user._doc, doctorInfo };
 		}
 	} else if (user.role === "patient") {
-		console.log(user.role);
 		const patientInfo = await patientService.get(id);
 		if (patientInfo) {
 			userInfo = { ...user._doc, patientInfo };
