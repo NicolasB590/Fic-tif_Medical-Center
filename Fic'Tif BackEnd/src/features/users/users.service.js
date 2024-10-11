@@ -1,9 +1,7 @@
 import User from "./users.model.js";
 
 const get = (id) => {
-	console.log(id);
-
-	return User.findById(id.id);
+	return User.findById(id);
 };
 
 const getAll = () => {

@@ -13,7 +13,7 @@ const getAll = async (_req, res) => {
 const get = async (req, res) => {
 	const id = req.params;
 
-	const user = await userService.get(id);
+	const user = await userService.get(id.id);
 
 	let userInfo = user;
 
