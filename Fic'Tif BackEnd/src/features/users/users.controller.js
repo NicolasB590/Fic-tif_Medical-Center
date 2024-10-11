@@ -18,12 +18,12 @@ const get = async (req, res) => {
 	let userInfo = user;
 
 	if (user.role === "doctor") {
-		const doctorInfo = await doctorService.get(id);
+		const doctorInfo = await doctorService.get(id.id);
 		if (doctorInfo) {
 			userInfo = { ...user._doc, doctorInfo };
 		}
 	} else if (user.role === "patient") {
-		const patientInfo = await patientService.get(id);
+		const patientInfo = await patientService.get(id.id);
 		if (patientInfo) {
 			userInfo = { ...user._doc, patientInfo };
 		}
@@ -33,8 +33,8 @@ const get = async (req, res) => {
 
 // Met à jour un utilisateur
 const update = async (req, res) => {
-	const { userId } = req.params;
-	const updatedUser = await userService.update(userId, req.body, {
+	const id = req.params;
+	const updatedUser = await userService.update(id.id, req.body, {
 		new: true,
 	});
 	if (!updatedUser) {

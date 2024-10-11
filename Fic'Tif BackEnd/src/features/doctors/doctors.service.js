@@ -1,7 +1,7 @@
 import Doctor from "./doctors.model.js";
 
-const get = (options) => {
-	return Doctor.findOne(options);
+const get = (id) => {
+	return Doctor.findById(id);
 };
 
 const create = (data) => {
