@@ -8,8 +8,8 @@ const getAll = () => {
 	return User.find({});
 };
 
-const update = (id) => {
-	return User.findByIdAndUpdate(id);
+const update = (id, change) => {
+	return User.findByIdAndUpdate(id, change);
 };
 
 const remove = (id) => {

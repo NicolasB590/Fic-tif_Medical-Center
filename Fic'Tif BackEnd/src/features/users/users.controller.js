@@ -34,9 +34,9 @@ const get = async (req, res) => {
 // Met à jour un utilisateur
 const update = async (req, res) => {
 	const id = req.params;
-	const updatedUser = await userService.update(id.id, req.body, {
-		new: true,
-	});
+	console.log(req.body);
+
+	const updatedUser = await userService.update(id.id, req.body);
 	if (!updatedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
@@ -45,11 +45,10 @@ const update = async (req, res) => {
 
 	let updatedInfo = updatedUser;
 
-	if (updatedUser.role === "Doctor") {
-		const updatedDoctor = await doctorService.updateDoctorByUserId(
-			userId,
-			req.body
-		);
+	if (updatedUser.role === "doctor") {
+		console.log(id.id);
+
+		const updatedDoctor = await doctorService.update(id.id, req.body);
 		if (!updatedDoctor) {
 			return res
 				.status(StatusCodes.NOT_FOUND)
@@ -63,8 +62,8 @@ const update = async (req, res) => {
 
 // Supprime un utilisateur
 const remove = async (req, res) => {
-	const { userId } = req.params;
-	const deletedUser = await userService.remove(userId);
+	const id = req.params;
+	const deletedUser = await userService.remove(id.id);
 	if (!deletedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
