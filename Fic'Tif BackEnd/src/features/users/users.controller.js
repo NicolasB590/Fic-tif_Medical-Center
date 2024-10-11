@@ -11,20 +11,20 @@ const getAll = async (_req, res) => {
 
 // Récupère un utilisateur
 const get = async (req, res) => {
-	const { userId } = req.params;
+	const id = req.params;
 
-	const user = await userService.get(userId);
+	const user = await userService.get(id);
 
 	let userInfo = user;
 
 	if (user.role === "doctor") {
-		const doctorInfo = await doctorService.get(userId);
+		const doctorInfo = await doctorService.get(id);
 		if (doctorInfo) {
 			userInfo = { ...user._doc, doctorInfo };
 		}
 	} else if (user.role === "patient") {
 		console.log(user.role);
-		const patientInfo = await patientService.get(userId);
+		const patientInfo = await patientService.get(id);
 		if (patientInfo) {
 			userInfo = { ...user._doc, patientInfo };
 		}
@@ -43,7 +43,23 @@ const update = async (req, res) => {
 			.status(StatusCodes.NOT_FOUND)
 			.json({ message: "Utilisateur non trouvé" });
 	}
-	res.status(StatusCodes.OK).json({ updatedUser });
+
+	let updatedInfo = updatedUser;
+
+	if (updatedUser.role === "Doctor") {
+		const updatedDoctor = await doctorService.updateDoctorByUserId(
+			userId,
+			req.body
+		);
+		if (!updatedDoctor) {
+			return res
+				.status(StatusCodes.NOT_FOUND)
+				.json({ message: "Informations du docteur non trouvées" });
+		} else {
+			updatedInfo = { ...updatedUser, updatedDoctor };
+		}
+	}
+	res.status(StatusCodes.OK).json({ updatedInfo });
 };
 
 // Supprime un utilisateur

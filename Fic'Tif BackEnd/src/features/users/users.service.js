@@ -1,7 +1,9 @@
 import User from "./users.model.js";
 
-const get = (options) => {
-	return User.findOne(options);
+const get = (id) => {
+	console.log(id);
+
+	return User.findById(id.id);
 };
 
 const getAll = () => {
