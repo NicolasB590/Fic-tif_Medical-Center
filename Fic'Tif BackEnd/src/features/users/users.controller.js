@@ -46,8 +46,6 @@ const update = async (req, res) => {
 	let updatedInfo = updatedUser;
 
 	if (updatedUser.role === "doctor") {
-		console.log(id.id);
-
 		const updatedDoctor = await doctorService.update(id.id, req.body);
 		if (!updatedDoctor) {
 			return res

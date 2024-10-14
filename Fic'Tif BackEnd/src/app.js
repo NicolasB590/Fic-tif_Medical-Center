@@ -17,6 +17,9 @@ app.use("/api/v1/auth", auth);
 import { users } from "./features/users/index.js";
 app.use("/api/v1/users", users);
 
+import { appointment } from "./features/appointment/index.js";
+app.use("/api/v1/appointments", appointment);
+
 app.use(notFound);
 
 app.use(errorHandler);

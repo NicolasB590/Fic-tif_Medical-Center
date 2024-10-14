@@ -1,7 +1,6 @@
 import { model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import validate from "../../middlewares/validation.middleware.js";
 
 const UserSchema = new Schema({
 	firstName: {
