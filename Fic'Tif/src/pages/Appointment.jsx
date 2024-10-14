@@ -86,7 +86,7 @@ const Appointment = () => {
                   <MyCalendar
                     defaultView={"weekdays"}
                     views={{ weekdays: WeekdaysView }}
-                    toolbar={false}
+                    toolbar={true}
                     max={moment("2023-03-18T18:00:00").toDate()}
                     min={moment("2023-03-18T08:00:00").toDate()}
                     events={[
