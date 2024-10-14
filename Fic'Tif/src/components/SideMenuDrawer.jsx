@@ -3,7 +3,7 @@ import SideMenu from "./SideMenu.jsx";
 
 const SideMenuDrawer = ({ children }) => {
   return (
-    <div className="drawer relative flex-1 lg:drawer-open">
+    <div className="drawer relative flex-1 lg:drawer-open lg:max-w-screen-lg">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center justify-center p-6">
         {children}
