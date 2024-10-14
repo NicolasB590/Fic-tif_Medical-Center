@@ -3,7 +3,7 @@ import * as doctorService from "../doctors/doctors.service.js";
 import * as patientService from "../patients/patients.service.js";
 import { StatusCodes } from "http-status-codes";
 
-// Récupérer la liste des utilisateurs
+// Récupére la liste des utilisateurs
 const getAll = async (_req, res) => {
 	const users = await userService.getAll();
 	res.status(StatusCodes.OK).json({ users });
