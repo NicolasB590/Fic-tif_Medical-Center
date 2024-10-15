@@ -7,7 +7,7 @@ import { RegisterDoctorSchema } from "../doctors/doctors.schema.js";
 
 // ! Il faut implémenter la validation de Schema pour le put
 
-router.get("/", usersController.getAll);
+router.get("/", usersController.getAllByOptions);
 router.get("/:id", usersController.get);
 router.put("/:id", usersController.update);
 router.delete("/:id", usersController.remove);

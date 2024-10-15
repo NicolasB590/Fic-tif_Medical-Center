@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.menu li > *:not(ul, .menu-title, details, .btn).active {
+  @apply text-primary;
+  @apply font-semibold;
+  @apply bg-base-200;
+}
+
 /* :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;

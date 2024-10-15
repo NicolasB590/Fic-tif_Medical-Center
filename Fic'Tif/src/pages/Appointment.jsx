@@ -1,11 +1,53 @@
 //Gère les prises de rendez-vous.
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
+import axios from "axios";
 
 const Appointment = () => {
+  const [specialities, setSpecialities] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [choiceDoctors, setChoiceDoctors] = useState(false);
+  const [appointment, setAppointment] = useState(false);
+
+  const getAllSpecialities = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/v1/doctors/specialities",
+      );
+      setSpecialities(data.specialities);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDoctors = async (speciality) => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/v1/doctors/options",
+        { params: { speciality } },
+      );
+
+      // console.log(data.doctors);
+      return data.doctors;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserById = async (id) => {
+    try {
+      const { data } = await axios.get(`http://localhost:5000/api/v1/users`, {
+        params: { _id: id },
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -13,24 +55,42 @@ const Appointment = () => {
     formState: { errors },
   } = useForm();
 
-  const [choiceDoctors, setChoiceDoctors] = useState(false);
-  const [infos, setInfos] = useState(false);
+  const changeDoctors = async (speciality) => {
+    const list = await getDoctors(speciality);
+    const idList = list.map((doc) => {
+      return doc.user;
+    });
 
-  const changeDoctors = (newValue) => {
-    setChoiceDoctors(newValue);
-    setInfos(!newValue);
+    const docsList = idList.map(async (id) => {
+      const user = await getUserById(id);
+      return user;
+    });
+
+    console.log(docsList);
+
+    // setDoctors(TheDoctors);
+
+    setChoiceDoctors(!choiceDoctors);
+    if (appointment) {
+      setAppointment(!appointment);
+    }
   };
 
-  const changeInfos = (newValue) => {
-    setInfos(newValue);
+  console.log(doctors);
+  const changeAppointment = () => {
+    setAppointment(!appointment);
   };
 
   const onSubmit = (data) => console.log(data);
 
+  useEffect(() => {
+    getAllSpecialities();
+  }, []);
+
   return (
     <div
       className={`mb-4 rounded-box bg-base-200 p-4 py-8 text-primary ${
-        infos === true ? "w-full min-w-96" : ""
+        appointment === true ? "w-full min-w-96" : ""
       }`}
     >
       <h1 className="mb-8 text-center text-2xl font-bold">
@@ -46,15 +106,18 @@ const Appointment = () => {
         </label>
         <select
           name="consultation"
-          onChange={() => changeDoctors(true)}
-          className="select select-bordered mb-4 mt-2 w-full"
+          onChange={(event) => changeDoctors(event.target.value)}
+          className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
           defaultValue={""}
         >
           <option disabled value="">
             -- Choix de la consultation --
           </option>
-          <option value={"eee"}>Ophtalmologie</option>
-          <option value={"eee"}>Cardiologie</option>
+          {specialities.map((speciality) => (
+            <option key={speciality} value={speciality}>
+              {speciality}
+            </option>
+          ))}
         </select>
         {choiceDoctors === true ? (
           <>
@@ -66,18 +129,23 @@ const Appointment = () => {
             </label>
             <select
               name="docs"
-              className="select select-bordered mb-4 mt-2 w-full"
-              onChange={() => changeInfos(true)}
+              className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
+              onChange={() => changeAppointment(true)}
               defaultValue={""}
             >
               <option value="" disabled>
                 -- Choix du médecin --
               </option>
+              {doctors.map((doctor) => (
+                <option key={doctor.speciality} value={doctor.speciality}>
+                  {doctor.speciality}
+                </option>
+              ))}
               <option>Doc 1</option>
               <option>Doc 2</option>
             </select>
 
-            {infos === true ? (
+            {appointment === true ? (
               <>
                 <h2 className="m-4 text-center text-xl font-semibold">
                   Choissisez un horaire
@@ -100,29 +168,6 @@ const Appointment = () => {
                       },
                     ]}
                   />
-                  {/* <Calendar
-                    localizer={localizer}
-                    events={[
-                      {
-                        title: "coin",
-                        start: new Date(2024, 9, 9, 9, 0, 0),
-                        end: new Date(2024, 9, 9, 10, 0, 0),
-                      },
-                      {
-                        title: "coin",
-                        start: new Date(2024, 9, 11, 14, 0, 0),
-                        end: new Date(2024, 9, 11, 14, 30, 0),
-                      },
-                    ]}
-                    defaultView={Views.WEEK}
-                    showMultiDayTimes
-                    startAccessor="start"
-                    endAccessor="end"
-                    step={30}
-                    style={{ height: 500 }}
-                    min={new Date(2024, 0, 1, 9, 0)}
-                    max={new Date(2024, 0, 1, 18, 0)}
-                  /> */}
                 </div>
                 {errors.exampleRequired && <span>This field is required</span>}
                 <input

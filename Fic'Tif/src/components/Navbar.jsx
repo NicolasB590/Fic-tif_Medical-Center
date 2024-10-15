@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <div className="navbar justify-center bg-base-200">
-      <div className="flex w-full flex-row lg:max-w-screen-lg">
+      <div className="flex w-full flex-row xl:max-w-screen-xl">
         <div className="flex-1">
           <Link
             to="/"

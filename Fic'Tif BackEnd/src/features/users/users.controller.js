@@ -3,12 +3,6 @@ import * as doctorService from "../doctors/doctors.service.js";
 import * as patientService from "../patients/patients.service.js";
 import { StatusCodes } from "http-status-codes";
 
-// Récupére la liste des utilisateurs
-const getAll = async (_req, res) => {
-	const users = await userService.getAll();
-	res.status(StatusCodes.OK).json({ users });
-};
-
 // Récupère un utilisateur
 const get = async (req, res) => {
 	const id = req.params;
@@ -29,6 +23,14 @@ const get = async (req, res) => {
 		}
 	}
 	res.status(StatusCodes.OK).json({ user: userInfo });
+};
+
+// Récupère une liste d'utilisateurs selons des critères, tous les utilisateurs si aucun critère
+const getAllByOptions = async (req, res) => {
+	console.log(req.query);
+
+	const users = await userService.getAllByOptions(req.query);
+	res.status(StatusCodes.OK).json({ users });
 };
 
 // Met à jour un utilisateur
@@ -72,4 +74,4 @@ const remove = async (req, res) => {
 		.json({ deletedUser, message: "Utilisateur supprimé avec succès" });
 };
 
-export { get, getAll, update, remove };
+export { get, update, remove, getAllByOptions };

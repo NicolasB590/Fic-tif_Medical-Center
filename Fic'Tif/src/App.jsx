@@ -57,7 +57,7 @@ const App = () => {
   ]);
 
   return (
-    <main className="relative flex min-h-dvh flex-col items-center">
+    <main className="relative flex min-h-dvh flex-col items-center bg-base-300">
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
         <RouterProvider router={router} />
       </ThemeContext.Provider>

@@ -4,8 +4,35 @@ const get = (id) => {
 	return User.findById(id);
 };
 
-const getAll = () => {
-	return User.find({});
+const getAllByOptions = async (options) => {
+	let query = {};
+
+	if (options) {
+		if (options._id) {
+			query._id = options._id;
+		}
+		if (options.firstName) {
+			query.firstName = options.firstName;
+		}
+		if (options.lastName) {
+			query.lastName = options.lastName;
+		}
+		if (options.email) {
+			query.email = options.email;
+		}
+		if (options.adress) {
+			query.adress = options.adress;
+		}
+		if (options.phoneNumber) {
+			query.phoneNumber = options.phoneNumber;
+		}
+	}
+
+	const users = await User.find(query).select(
+		"-_id -password -adress -role -birthDate"
+	);
+
+	return users;
 };
 
 const update = (id, change) => {
@@ -20,4 +47,4 @@ const create = (data) => {
 	return User(data).save();
 };
 
-export { get, getAll, update, remove, create };
+export { get, update, remove, create, getAllByOptions };
