@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
+import generateReservationSlots from "../utils/generateReservationSlots.js";
 import axios from "axios";
 
 const Appointment = () => {
@@ -11,6 +12,9 @@ const Appointment = () => {
   const [doctors, setDoctors] = useState([]);
   const [choiceDoctors, setChoiceDoctors] = useState(false);
   const [appointment, setAppointment] = useState(false);
+  const [slots, setSlots] = useState([]);
+
+  const allSlots = generateReservationSlots();
 
   const getAllSpecialities = async () => {
     try {
@@ -23,26 +27,13 @@ const Appointment = () => {
     }
   };
 
-  const getDoctors = async (speciality) => {
+  const getDoctorsBySpeciality = async (speciality) => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/v1/doctors/options",
-        { params: { speciality } },
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/doctors/bySpeciality",
+        { speciality },
       );
-
-      // console.log(data.doctors);
       return data.doctors;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getUserById = async (id) => {
-    try {
-      const { data } = await axios.get(`http://localhost:5000/api/v1/users`, {
-        params: { _id: id },
-      });
-      return data;
     } catch (error) {
       console.log(error);
     }
@@ -56,29 +47,98 @@ const Appointment = () => {
   } = useForm();
 
   const changeDoctors = async (speciality) => {
-    const list = await getDoctors(speciality);
-    const idList = list.map((doc) => {
-      return doc.user;
+    const list = await getDoctorsBySpeciality(speciality);
+
+    const docList = list.map((doc) => {
+      return {
+        lastName: doc.user.lastName,
+        firstName: doc.user.firstName,
+        id: doc._id,
+      };
     });
 
-    const docsList = idList.map(async (id) => {
-      const user = await getUserById(id);
-      return user;
-    });
+    setDoctors(docList);
 
-    console.log(docsList);
-
-    // setDoctors(TheDoctors);
-
-    setChoiceDoctors(!choiceDoctors);
+    if (!choiceDoctors) {
+      setChoiceDoctors(!choiceDoctors);
+    }
     if (appointment) {
       setAppointment(!appointment);
     }
   };
 
-  console.log(doctors);
-  const changeAppointment = () => {
-    setAppointment(!appointment);
+  const getReservedSlots = async (doctorId) => {
+    console.log(doctorId);
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/appointments/bydoctors",
+        { doctorId },
+      );
+
+      const newData = data.appointments.map((d) => {
+        // const options = {
+        //   timeZone: "Europe/Paris",
+        //   year: "numeric",
+        //   month: "2-digit",
+        //   day: "2-digit",
+        //   hour: "2-digit",
+        //   minute: "2-digit",
+        //   hour12: false, // Format 24h
+        // };
+
+        d.date = new Date(d.date).toLocaleString("fr-FR");
+        return d;
+      });
+
+      return newData;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const changeAppointment = async (doctorId) => {
+    const reservedSlots = await getReservedSlots(doctorId);
+    console.log(reservedSlots);
+
+    console.log(allSlots);
+
+    // const availableSlots = allSlots.filter((slot) => {
+    //   return slot.start.getHours() !==
+
+    // })
+
+    const availableSlots = allSlots.filter((slot) => {
+      const slotStart = moment(slot.start).toLocaleString("fr-FR");
+      console.log(slotStart);
+
+      // console.log(slotStart._d.getHours());
+      // console.log(slotStart._d.getMinutes());
+
+      const slotEnd = moment(slot.end).toLocaleString("fr-FR");
+
+      const filteredSlots = !reservedSlots.some((appointment) => {
+        const appointmentDate = moment(appointment.date);
+
+        const appointmentStart = appointmentDate.startOf("hour");
+        console.log(appointmentStart);
+
+        const appointmentEnd = appointmentDate.endOf("hour");
+
+        return (
+          (slotStart >= appointmentStart && slotStart < appointmentEnd) ||
+          (slotEnd > appointmentStart && slotEnd <= appointmentEnd)
+        );
+      });
+
+      return filteredSlots;
+    });
+
+    setSlots(availableSlots);
+
+    if (!appointment) {
+      setAppointment(!appointment);
+    }
   };
 
   const onSubmit = (data) => console.log(data);
@@ -130,19 +190,17 @@ const Appointment = () => {
             <select
               name="docs"
               className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
-              onChange={() => changeAppointment(true)}
+              onChange={(event) => changeAppointment(event.target.value)}
               defaultValue={""}
             >
               <option value="" disabled>
                 -- Choix du médecin --
               </option>
-              {doctors.map((doctor) => (
-                <option key={doctor.speciality} value={doctor.speciality}>
-                  {doctor.speciality}
+              {doctors.map((doc) => (
+                <option key={doc.id} value={doc.id}>
+                  {`Dr. ${doc.lastName} ${doc.firstName}`}
                 </option>
               ))}
-              <option>Doc 1</option>
-              <option>Doc 2</option>
             </select>
 
             {appointment === true ? (
@@ -157,16 +215,7 @@ const Appointment = () => {
                     toolbar={true}
                     max={moment("2023-03-18T18:00:00").toDate()}
                     min={moment("2023-03-18T08:00:00").toDate()}
-                    events={[
-                      {
-                        start: new Date(2024, 9, 9, 9, 0, 0),
-                        end: new Date(2024, 9, 9, 10, 0, 0),
-                      },
-                      {
-                        start: new Date(2024, 9, 11, 14, 0, 0),
-                        end: new Date(2024, 9, 11, 14, 30, 0),
-                      },
-                    ]}
+                    events={allSlots}
                   />
                 </div>
                 {errors.exampleRequired && <span>This field is required</span>}

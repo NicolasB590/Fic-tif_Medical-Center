@@ -14,7 +14,9 @@ const getAllByOptions = async (req, res) => {
 };
 
 const getDoctorsBySpeciality = async (req, res) => {
-	const doctors = await doctorService.getDoctorsBySpeciality(req.body);
+	const doctors = await doctorService.getDoctorsBySpeciality(
+		req.body.speciality
+	);
 	res.status(StatusCodes.OK).json({ doctors });
 };
 

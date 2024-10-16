@@ -15,5 +15,6 @@ router.post("/", validate(AppointmentSchema), appointmentController.register);
 router.get("/", appointmentController.get);
 router.put("/:id", appointmentController.update);
 router.delete("/:id", appointmentController.remove);
+router.post("/bydoctors", appointmentController.getAllByDoctorId);
 
 export default router;

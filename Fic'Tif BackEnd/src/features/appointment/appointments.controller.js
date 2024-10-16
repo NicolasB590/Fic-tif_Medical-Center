@@ -78,4 +78,20 @@ const remove = async (req, res) => {
 		.json({ deletedAppointment, message: "Rendez-vous supprimé avec succès" });
 };
 
-export { get, getAll, update, remove, register };
+// Récupère la liste des rendez-vous assignés à un médecin
+const getAllByDoctorId = async (req, res) => {
+	console.log(req.body.doctorId);
+
+	const doctorId = req.body.doctorId;
+
+	const appointments = await appointmentService.getAllByDoctorId(doctorId);
+
+	if (!appointments) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Aucun rendez-vous n'a été trouvé" });
+	}
+	res.status(StatusCodes.OK).json({ appointments });
+};
+
+export { get, getAll, update, remove, register, getAllByDoctorId };

@@ -21,8 +21,11 @@ const getSpecialities = async () => {
 };
 
 const getDoctorsBySpeciality = async (speciality) => {
-	const doctors = await Doctor.find({ speciality }).populate("user");
-	return;
+	const doctors = await Doctor.find({ speciality }).populate({
+		path: "user",
+		select: "-birthDate -adress -role",
+	});
+	return doctors;
 };
 
 const getAllByOptions = async (options) => {
@@ -34,9 +37,19 @@ const getAllByOptions = async (options) => {
 		}
 	}
 
-	const doctors = await Doctor.find(query).select("-_id");
+	const doctors = await Doctor.find(query).select("-_id").populate({
+		path: "user",
+		select: "-_id -birthDate -adress -role",
+	});
 
 	return doctors;
 };
 
-export { get, create, update, getSpecialities, getAllByOptions };
+export {
+	get,
+	create,
+	update,
+	getSpecialities,
+	getAllByOptions,
+	getDoctorsBySpeciality,
+};

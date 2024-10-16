@@ -22,4 +22,8 @@ const create = (data) => {
 	return Appointment(data).save();
 };
 
-export { get, create, update, remove };
+const getAllByDoctorId = (doctorId) => {
+	return Appointment.find({ doctorId });
+};
+
+export { get, create, update, remove, getAllByDoctorId };
