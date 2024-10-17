@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Services from "./pages/Services.jsx";
 import Appointment from "./pages/Appointment.jsx";
+// import Appointment2 from "./pages/Appointment2.jsx";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export const ThemeContext = createContext(null);

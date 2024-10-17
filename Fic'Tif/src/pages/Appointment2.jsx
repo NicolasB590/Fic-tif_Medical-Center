@@ -1,29 +1,19 @@
-//Gère les prises de rendez-vous.
 import moment from "moment-timezone";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/generateReservationSlots.js";
 import axios from "axios";
-import { useFetcher } from "react-router-dom";
 
-const Appointment = () => {
+const Appointment2 = () => {
   const [specialities, setSpecialities] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [choiceDoctors, setChoiceDoctors] = useState(false);
   const [appointment, setAppointment] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [formData, setFormData] = useState({
-    doctor: null,
-    reservedDate: null,
-  });
-  // const fetcher = useFetcher();
-
-  // if (fetcher.formData) {
-  //   for (const data of fetcher.formData.entries()) {
-  //     console.log(JSON.stringify(data));
-  //   }
-  // }
+  const [selectedEvent, setSelectedEvent] = useState(null); // État pour l'événement sélectionné
+  const [isModalOpen, setIsModalOpen] = useState(false); // État pour la modale
 
   const allSlots = generateReservationSlots();
 
@@ -50,25 +40,23 @@ const Appointment = () => {
     }
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const changeDoctors = async (speciality) => {
     const list = await getDoctorsBySpeciality(speciality);
-
-    const docList = list.map((doc) => {
-      return {
-        lastName: doc.user.lastName,
-        firstName: doc.user.firstName,
-        id: doc._id,
-      };
-    });
+    const docList = list.map((doc) => ({
+      lastName: doc.user.lastName,
+      firstName: doc.user.firstName,
+      id: doc._id,
+    }));
 
     setDoctors(docList);
-
-    if (!choiceDoctors) {
-      setChoiceDoctors(!choiceDoctors);
-    }
-    if (appointment) {
-      setAppointment(!appointment);
-    }
+    setChoiceDoctors(true);
+    setAppointment(false);
   };
 
   const getReservedSlots = async (doctorId) => {
@@ -84,55 +72,46 @@ const Appointment = () => {
   };
 
   const changeAppointment = async (doctorId) => {
-    console.log(doctorId);
-
-    setFormData({
-      doctor: doctorId,
-      reservedDate: formData.reservedDate,
-    });
-
     try {
       const reservedSlots = await getReservedSlots(doctorId);
       const reservedAppointments = reservedSlots.appointments;
 
-      // Récupération des créneaux disponibles
       const availableSlots = allSlots.filter((slot) => {
         const slotStart = moment(slot.start).tz("Europe/Paris");
         const slotEnd = slotStart.clone().add(30, "minutes");
 
-        const isAvailable = !reservedAppointments.some((appointment) => {
-          const appointmentStart = moment(appointment.date)
-            .tz("Europe/Paris")
-            .add(1, "seconds");
-          const appointmentEnd = moment(appointmentStart).add(29, "minutes");
+        return !reservedAppointments.some((appointment) => {
+          const appointmentStart = moment(appointment.date).tz("Europe/Paris");
+          const appointmentEnd = appointmentStart.clone().add(30, "minutes");
 
           return (
             slotStart.isBefore(appointmentEnd) &&
             slotEnd.isAfter(appointmentStart)
           );
         });
-
-        return isAvailable;
       });
 
       setSlots(availableSlots);
-
-      if (!appointment) {
-        setAppointment(!appointment);
-      }
+      setAppointment(true);
     } catch (error) {
       console.error("Erreur:", error);
     }
   };
 
   const handleEventClick = (event) => {
-    const date = event.start;
+    setSelectedEvent(event); // Stocke l'événement cliqué
+    setIsModalOpen(true); // Ouvre la modale
+  };
 
-    setFormData({ doctor: formData.doctor, reservedDate: date.getHours() });
+  const onSubmit = (data) => {
+    console.log(data);
+    // Ajouter la logique de soumission du formulaire ici
+    handleCloseModal();
+  };
 
-    console.log(formData);
-
-    document.getElementById("my_modal_5").showModal();
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null); // Réinitialise l'événement sélectionné
   };
 
   useEffect(() => {
@@ -141,14 +120,12 @@ const Appointment = () => {
 
   return (
     <div
-      className={`mb-4 rounded-box bg-base-200 p-4 py-8 text-primary ${
-        appointment === true ? "w-full min-w-96" : ""
-      }`}
+      className={`mb-4 rounded-box bg-base-200 p-4 py-8 text-primary ${appointment ? "w-full min-w-96" : ""}`}
     >
       <h1 className="mb-8 text-center text-2xl font-bold">
         Prendre un rendez-vous
       </h1>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label
           htmlFor="name"
           className="my-4 text-center text-xl font-semibold"
@@ -159,7 +136,7 @@ const Appointment = () => {
           name="consultation"
           onChange={(event) => changeDoctors(event.target.value)}
           className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
-          defaultValue={""}
+          defaultValue=""
         >
           <option disabled value="">
             -- Choix de la consultation --
@@ -170,34 +147,36 @@ const Appointment = () => {
             </option>
           ))}
         </select>
-        {choiceDoctors === true ? (
+
+        {choiceDoctors && (
           <>
             <label
               htmlFor="docs"
               className="my-4 text-center text-xl font-semibold"
             >
-              <h2>Choissisez votre médecin</h2>
+              <h2>Choisissez votre médecin</h2>
             </label>
             <select
               name="docs"
               className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
               onChange={(event) => changeAppointment(event.target.value)}
-              defaultValue={""}
+              defaultValue=""
             >
               <option value="" disabled>
                 -- Choix du médecin --
               </option>
               {doctors.map((doc) => (
-                <option key={doc.id} value={doc.id}>
-                  {`Dr. ${doc.lastName} ${doc.firstName}`}
-                </option>
+                <option
+                  key={doc.id}
+                  value={doc.id}
+                >{`Dr. ${doc.lastName} ${doc.firstName}`}</option>
               ))}
             </select>
 
-            {appointment === true ? (
+            {appointment && (
               <>
                 <h2 className="m-4 text-center text-xl font-semibold">
-                  Choissisez un horaire
+                  Choisissez un horaire
                 </h2>
                 <div>
                   <MyCalendar
@@ -207,46 +186,59 @@ const Appointment = () => {
                     max={moment("2023-03-18T18:00:00").toDate()}
                     min={moment("2023-03-18T08:00:00").toDate()}
                     events={slots}
-                    onSelectEvent={handleEventClick}
+                    onSelectEvent={handleEventClick} // Gère le clic sur l'événement
                   />
                 </div>
+                {errors.exampleRequired && <span>This field is required</span>}
                 <input
                   type="submit"
                   className="btn btn-primary btn-block my-4 text-base-100"
                 />
               </>
-            ) : (
-              ""
             )}
           </>
-        ) : (
-          ""
         )}
       </form>
-      <dialog id="my_modal_5" className="modal">
-        <div className="modal-box">
-          <div>
-            <h3 className="text-lg font-bold">Confirmation de rendez-vous :</h3>
-            <p className="py-4">Informations du Patient</p>
-            <p className="py-4">Informations du Docteur</p>
-            <p className="py-4">Date du Rendez-vous sélectionné</p>
-          </div>
-          <div>
-            <form method="dialog">
-              <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
-                ✕
+
+      {/* Modale pour le formulaire */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Détails de l'événement"
+      >
+        {selectedEvent && (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label>Titre :</label>
+              <input
+                type="text"
+                defaultValue={selectedEvent.title}
+                {...register("title", { required: true })}
+                className="input input-bordered w-full"
+              />
+              {errors.title && <span>This field is required</span>}
+            </div>
+            <div>
+              <label>Description :</label>
+              <textarea
+                {...register("description", { required: true })}
+                className="textarea textarea-bordered w-full"
+              />
+              {errors.description && <span>This field is required</span>}
+            </div>
+            <div className="modal-action">
+              <button type="submit" className="btn">
+                Valider
               </button>
-            </form>
-            <form>
-              <input type="submit" value="Confirmer" className="btn" />
-            </form>
-          </div>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+              <button type="button" className="btn" onClick={handleCloseModal}>
+                Annuler
+              </button>
+            </div>
+          </form>
+        )}
+      </Modal>
     </div>
   );
 };
-export default Appointment;
+
+export default Appointment2;

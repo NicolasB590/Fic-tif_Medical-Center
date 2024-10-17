@@ -14,17 +14,18 @@ const generateReservationSlot = () => {
             events.push({
               id: `${m.format("YYYY-MM-DD")}-${hour}-0`,
               title: `Créneau ${hour}:00`,
-              start: m.clone().hour(hour).minute(0).toDate(),
-              end: m.clone().hour(hour).minute(30).toDate(),
+              start: m.clone().hour(hour).minute(0).second(0).toDate(),
+              end: m.clone().hour(hour).minute(30).second(0).toDate(),
             });
             events.push({
               id: `${m.format("YYYY-MM-DD")}-${hour}-30`,
               title: `Créneau ${hour}:30`,
-              start: m.clone().hour(hour).minute(30).toDate(),
+              start: m.clone().hour(hour).minute(30).second(0).toDate(),
               end: m
                 .clone()
                 .hour(hour + 1)
                 .minute(0)
+                .second(0)
                 .toDate(),
             });
           }
@@ -32,11 +33,12 @@ const generateReservationSlot = () => {
             events.push({
               id: `${m.format("YYYY-MM-DD")}-${hour}-30`,
               title: `Créneau ${hour}:30`,
-              start: m.clone().hour(hour).minute(30).toDate(),
+              start: m.clone().hour(hour).minute(30).second(0).toDate(),
               end: m
                 .clone()
                 .hour(hour + 1)
                 .minute(0)
+                .second(0)
                 .toDate(),
             });
           }
@@ -46,17 +48,18 @@ const generateReservationSlot = () => {
           events.push({
             id: `${m.format("YYYY-MM-DD")}-${hour}-0`,
             title: `Créneau ${hour}:00`,
-            start: m.clone().hour(hour).minute(0).toDate(),
-            end: m.clone().hour(hour).minute(30).toDate(),
+            start: m.clone().hour(hour).minute(0).second(0).toDate(),
+            end: m.clone().hour(hour).minute(30).second(0).toDate(),
           });
           events.push({
             id: `${m.format("YYYY-MM-DD")}-${hour}-30`,
             title: `Créneau ${hour}:30`,
-            start: m.clone().hour(hour).minute(30).toDate(),
+            start: m.clone().hour(hour).minute(30).second(0).toDate(),
             end: m
               .clone()
               .hour(hour + 1)
               .minute(0)
+              .second(0)
               .toDate(),
           });
         }
