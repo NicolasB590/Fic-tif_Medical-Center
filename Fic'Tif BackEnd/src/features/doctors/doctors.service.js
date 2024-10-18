@@ -35,6 +35,12 @@ const getAllByOptions = async (options) => {
 		if (options.speciality) {
 			query.speciality = options.speciality;
 		}
+		if (options._id) {
+			query._id = options._id;
+		}
+		if (options.user) {
+			query.user = options.user;
+		}
 	}
 
 	const doctors = await Doctor.find(query).select("-_id").populate({

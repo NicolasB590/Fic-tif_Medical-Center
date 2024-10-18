@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 // Créé un Rendez-vous
 const register = async (req, res) => {
 	const doctor = await doctorService.get(req.body.doctorId);
+	console.log(`doc:${doctor}`);
 
 	if (!doctor) {
 		return res
@@ -13,7 +14,9 @@ const register = async (req, res) => {
 			.json({ msg: "Aucun docteur correspondant" });
 	}
 
+	console.log(req.body.patientId);
 	const patient = await patientService.get(req.body.patientId);
+	console.log(`patient:${patient}`);
 
 	if (!patient) {
 		return res

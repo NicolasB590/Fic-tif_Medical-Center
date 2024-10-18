@@ -5,6 +5,7 @@ import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/generateReservationSlots.js";
 import axios from "axios";
+import { useRef } from "react";
 import { useFetcher } from "react-router-dom";
 
 const Appointment = () => {
@@ -17,6 +18,9 @@ const Appointment = () => {
     doctor: null,
     reservedDate: null,
   });
+  const [currentDoctor, setCurrentDoctor] = useState(null);
+  const modalRef = useRef(null);
+
   // const fetcher = useFetcher();
 
   // if (fetcher.formData) {
@@ -45,6 +49,35 @@ const Appointment = () => {
         { speciality },
       );
       return data.doctors;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitForm = async () => {
+    event.preventDefault();
+    console.log("coin");
+
+    if (!formData.doctor || !formData.reservedDate) {
+      console.error("Docteur ou date de rendez-vous non sélectionné.");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/appointments",
+        {
+          date: formData.reservedDate,
+          doctorId: formData.doctor,
+          patientId: "6707d96b65816cd4c6b4dd38",
+        },
+      );
+
+      console.log("Rendez-vous confirmé :", data);
+
+      if (modalRef.current) {
+        modalRef.current.close();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -84,12 +117,12 @@ const Appointment = () => {
   };
 
   const changeAppointment = async (doctorId) => {
-    console.log(doctorId);
-
-    setFormData({
+    const updatedData = {
       doctor: doctorId,
-      reservedDate: formData.reservedDate,
-    });
+      reservedDate: null,
+    };
+
+    setFormData(updatedData);
 
     try {
       const reservedSlots = await getReservedSlots(doctorId);
@@ -125,14 +158,29 @@ const Appointment = () => {
     }
   };
 
-  const handleEventClick = (event) => {
-    const date = event.start;
+  const handleEventClick = async (event) => {
+    const updatedData = { doctor: formData.doctor, reservedDate: event.start };
 
-    setFormData({ doctor: formData.doctor, reservedDate: date.getHours() });
+    setFormData(updatedData);
 
-    console.log(formData);
+    console.log(updatedData);
 
-    document.getElementById("my_modal_5").showModal();
+    if (modalRef.current) {
+      modalRef.current.showModal();
+    }
+
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/v1/doctors/options",
+        { params: { _id: updatedData.doctor } },
+      );
+
+      console.log(data);
+
+      setCurrentDoctor(data.doctors);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -223,13 +271,28 @@ const Appointment = () => {
           ""
         )}
       </form>
-      <dialog id="my_modal_5" className="modal">
+      <dialog id="my_modal_5" className="modal" ref={modalRef}>
         <div className="modal-box">
           <div>
             <h3 className="text-lg font-bold">Confirmation de rendez-vous :</h3>
+            {currentDoctor && currentDoctor.length > 0 && (
+              <div>
+                <h4>
+                  {`Dr. ${currentDoctor[0].user.lastName} ${currentDoctor[0].user.firstName}`}
+                </h4>
+                <h5>{`Spécialité : ${currentDoctor[0].speciality}`}</h5>
+                <p>{`Numéro de téléphone : ${currentDoctor[0].user.phoneNumber}`}</p>
+                <p>{`Email : ${currentDoctor[0].user.email}`}</p>
+              </div>
+            )}
             <p className="py-4">Informations du Patient</p>
-            <p className="py-4">Informations du Docteur</p>
-            <p className="py-4">Date du Rendez-vous sélectionné</p>
+            <p className="py-4">
+              {formData.reservedDate
+                ? `Date du Rendez-vous : ${moment(formData.reservedDate).format(
+                    "dddd DD MMMM YYYY hh:mm",
+                  )}`
+                : "Date non sélectionnée"}
+            </p>
           </div>
           <div>
             <form method="dialog">
@@ -237,7 +300,7 @@ const Appointment = () => {
                 ✕
               </button>
             </form>
-            <form>
+            <form action={submitForm}>
               <input type="submit" value="Confirmer" className="btn" />
             </form>
           </div>
