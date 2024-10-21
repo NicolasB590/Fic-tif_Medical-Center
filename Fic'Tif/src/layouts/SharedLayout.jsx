@@ -1,13 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import SideMenuDrawer from "../components/SideMenuDrawer.jsx";
+import Loading from "../components/Loading.jsx";
 
 const SharedLayout = () => {
+  const navigation = useNavigation();
+  const isPageLoading = navigation.state === "loading";
   return (
     <>
       <Navbar />
       <SideMenuDrawer>
-        <Outlet />
+        {isPageLoading ? <Loading /> : <Outlet />}
       </SideMenuDrawer>
     </>
   );

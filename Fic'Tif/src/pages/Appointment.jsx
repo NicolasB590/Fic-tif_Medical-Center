@@ -2,11 +2,40 @@
 import moment from "moment-timezone";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Form, useFetcher } from "react-router-dom";
+import { useFetcher, redirect } from "react-router-dom";
 
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/generateReservationSlots.js";
+
+export const action = async ({ request }) => {
+  console.log("coin");
+
+  const formData = await request.formData();
+  const doctor = formData.get("doctor");
+  const reservedDate = formData.get("reservedDate");
+
+  if (!doctor || !reservedDate) {
+    throw new Error("Docteur ou date de rendez-vous non sélectionné.");
+  }
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/v1/appointments",
+      {
+        date: reservedDate,
+        doctorId: doctor,
+        patientId: "6707d96b65816cd4c6b4dd38",
+      },
+    );
+
+    console.log("Rendez-vous confirmé :", data);
+
+    return redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const Appointment = () => {
   const [specialities, setSpecialities] = useState([]);
