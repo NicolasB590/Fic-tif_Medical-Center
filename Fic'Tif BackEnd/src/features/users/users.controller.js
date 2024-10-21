@@ -42,7 +42,7 @@ const update = async (req, res) => {
 	if (!updatedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
-			.json({ message: "Utilisateur non trouvé" });
+			.json({ msg: "Utilisateur non trouvé" });
 	}
 
 	let updatedInfo = updatedUser;
@@ -52,7 +52,7 @@ const update = async (req, res) => {
 		if (!updatedDoctor) {
 			return res
 				.status(StatusCodes.NOT_FOUND)
-				.json({ message: "Informations du docteur non trouvées" });
+				.json({ msg: "Informations du docteur non trouvées" });
 		} else {
 			updatedInfo = { ...updatedUser, updatedDoctor };
 		}
@@ -67,11 +67,11 @@ const remove = async (req, res) => {
 	if (!deletedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
-			.json({ message: "Utilisateur non trouvé" });
+			.json({ msg: "Utilisateur non trouvé" });
 	}
 	res
 		.status(StatusCodes.OK)
-		.json({ deletedUser, message: "Utilisateur supprimé avec succès" });
+		.json({ deletedUser, msg: "Utilisateur supprimé avec succès" });
 };
 
 export { get, update, remove, getAllByOptions };

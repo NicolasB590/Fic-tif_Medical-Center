@@ -10,8 +10,6 @@ import generateReservationSlots from "../utils/generateReservationSlots.js";
 import { toast } from "react-toastify";
 
 export const action = async ({ request }) => {
-  console.log("coin");
-
   const formData = await request.formData();
   const doctor = formData.get("doctor");
   const reservedDate = formData.get("reservedDate");
@@ -30,11 +28,13 @@ export const action = async ({ request }) => {
       },
     );
 
-    toast.success("Rendez-vous confirmé");
+    toast.success(data.msg);
 
     return redirect("/");
   } catch (error) {
-    console.log(error);
+    const errorMessage =
+      error.response?.data?.msg || "Erreur lors de la prise de rendez-vous";
+    toast.error(errorMessage);
   }
 };
 

@@ -27,7 +27,9 @@ const register = async (req, res) => {
 	// ! Ajouter la vérification de Rendez-vous déjà existant pour ce doctor sur ce créneau
 
 	const appointment = await appointmentService.create({ ...req.body });
-	res.status(StatusCodes.CREATED).json({ appointment });
+	res
+		.status(StatusCodes.CREATED)
+		.json({ appointment, msg: "Rendez-vous confirmé" });
 };
 
 // Récupére la liste des Rendez-vous
@@ -61,7 +63,7 @@ const update = async (req, res) => {
 	if (!updatedAppointment) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
-			.json({ message: "Rendez-vous non trouvé" });
+			.json({ msg: "Rendez-vous non trouvé" });
 	}
 
 	res.status(StatusCodes.OK).json({ updatedAppointment });
@@ -74,11 +76,11 @@ const remove = async (req, res) => {
 	if (!deletedAppointment) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
-			.json({ message: "Rendez-vous non trouvé" });
+			.json({ msg: "Rendez-vous non trouvé" });
 	}
 	res
 		.status(StatusCodes.OK)
-		.json({ deletedAppointment, message: "Rendez-vous supprimé avec succès" });
+		.json({ deletedAppointment, msg: "Rendez-vous supprimé avec succès" });
 };
 
 // Récupère la liste des rendez-vous assignés à un médecin
