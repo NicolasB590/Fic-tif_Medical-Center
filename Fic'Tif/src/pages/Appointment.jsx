@@ -1,12 +1,12 @@
 //Gère les prises de rendez-vous.
 import moment from "moment-timezone";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { Form, useFetcher } from "react-router-dom";
+
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/generateReservationSlots.js";
-import axios from "axios";
-import { useRef } from "react";
-import { useFetcher } from "react-router-dom";
 
 const Appointment = () => {
   const [specialities, setSpecialities] = useState([]);
@@ -14,21 +14,14 @@ const Appointment = () => {
   const [choiceDoctors, setChoiceDoctors] = useState(false);
   const [appointment, setAppointment] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [formData, setFormData] = useState({
+  const [appointmentValues, setAppointmentValues] = useState({
     doctor: null,
     reservedDate: null,
   });
   const [currentDoctor, setCurrentDoctor] = useState(null);
   const modalRef = useRef(null);
-
-  // const fetcher = useFetcher();
-
-  // if (fetcher.formData) {
-  //   for (const data of fetcher.formData.entries()) {
-  //     console.log(JSON.stringify(data));
-  //   }
-  // }
-
+  const formRef = useRef();
+  const fetcher = useFetcher();
   const allSlots = generateReservationSlots();
 
   const getAllSpecialities = async () => {
@@ -54,32 +47,15 @@ const Appointment = () => {
     }
   };
 
-  const submitForm = async () => {
+  const submitForm = async (event) => {
     event.preventDefault();
-    console.log("coin");
+    fetcher.submit(appointmentValues, {
+      method: "post",
+      action: "/appointment",
+    });
 
-    if (!formData.doctor || !formData.reservedDate) {
-      console.error("Docteur ou date de rendez-vous non sélectionné.");
-      return;
-    }
-
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/v1/appointments",
-        {
-          date: formData.reservedDate,
-          doctorId: formData.doctor,
-          patientId: "6707d96b65816cd4c6b4dd38",
-        },
-      );
-
-      console.log("Rendez-vous confirmé :", data);
-
-      if (modalRef.current) {
-        modalRef.current.close();
-      }
-    } catch (error) {
-      console.log(error);
+    if (modalRef.current) {
+      modalRef.current.close();
     }
   };
 
@@ -122,7 +98,7 @@ const Appointment = () => {
       reservedDate: null,
     };
 
-    setFormData(updatedData);
+    setAppointmentValues(updatedData);
 
     try {
       const reservedSlots = await getReservedSlots(doctorId);
@@ -159,11 +135,12 @@ const Appointment = () => {
   };
 
   const handleEventClick = async (event) => {
-    const updatedData = { doctor: formData.doctor, reservedDate: event.start };
+    const updatedValues = {
+      doctor: appointmentValues.doctor,
+      reservedDate: event.start,
+    };
 
-    setFormData(updatedData);
-
-    console.log(updatedData);
+    setAppointmentValues(updatedValues);
 
     if (modalRef.current) {
       modalRef.current.showModal();
@@ -172,10 +149,8 @@ const Appointment = () => {
     try {
       const { data } = await axios.get(
         "http://localhost:5000/api/v1/doctors/options",
-        { params: { _id: updatedData.doctor } },
+        { params: { _id: updatedValues.doctor } },
       );
-
-      console.log(data);
 
       setCurrentDoctor(data.doctors);
     } catch (error) {
@@ -196,15 +171,15 @@ const Appointment = () => {
       <h1 className="mb-8 text-center text-2xl font-bold">
         Prendre un rendez-vous
       </h1>
-      <form>
+      <form ref={formRef}>
         <label
-          htmlFor="name"
+          htmlFor="speciality"
           className="my-4 text-center text-xl font-semibold"
         >
           <h2>Type de consultation</h2>
         </label>
         <select
-          name="consultation"
+          name="speciality"
           onChange={(event) => changeDoctors(event.target.value)}
           className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
           defaultValue={""}
@@ -221,13 +196,13 @@ const Appointment = () => {
         {choiceDoctors === true ? (
           <>
             <label
-              htmlFor="docs"
+              htmlFor="doctor"
               className="my-4 text-center text-xl font-semibold"
             >
               <h2>Choissisez votre médecin</h2>
             </label>
             <select
-              name="docs"
+              name="doctor"
               className="select select-bordered mb-4 mt-2 w-full transition-all hover:text-secondary"
               onChange={(event) => changeAppointment(event.target.value)}
               defaultValue={""}
@@ -258,10 +233,6 @@ const Appointment = () => {
                     onSelectEvent={handleEventClick}
                   />
                 </div>
-                <input
-                  type="submit"
-                  className="btn btn-primary btn-block my-4 text-base-100"
-                />
               </>
             ) : (
               ""
@@ -287,10 +258,10 @@ const Appointment = () => {
             )}
             <p className="py-4">Informations du Patient</p>
             <p className="py-4">
-              {formData.reservedDate
-                ? `Date du Rendez-vous : ${moment(formData.reservedDate).format(
-                    "dddd DD MMMM YYYY hh:mm",
-                  )}`
+              {appointmentValues.reservedDate
+                ? `Date du Rendez-vous : ${moment(
+                    appointmentValues.reservedDate,
+                  ).format("dddd DD MMMM YYYY hh:mm")}`
                 : "Date non sélectionnée"}
             </p>
           </div>
@@ -300,7 +271,7 @@ const Appointment = () => {
                 ✕
               </button>
             </form>
-            <form action={submitForm}>
+            <form onSubmit={() => submitForm(event)}>
               <input type="submit" value="Confirmer" className="btn" />
             </form>
           </div>
