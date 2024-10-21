@@ -6,7 +6,8 @@ import Services from "./pages/Services.jsx";
 import Appointment from "./pages/Appointment.jsx";
 import { action as appointmentAction } from "./pages/Appointment.jsx";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export const ThemeContext = createContext(null);
 
@@ -62,7 +63,19 @@ const App = () => {
   return (
     <main className="relative flex min-h-dvh flex-col items-center bg-base-300">
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <ToastContainer />
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme={theme === "cupcake" ? "light" : "dark"}
+          transition={Bounce}
+        />
         <RouterProvider router={router} />
       </ThemeContext.Provider>
     </main>

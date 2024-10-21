@@ -7,6 +7,7 @@ import { useFetcher, redirect } from "react-router-dom";
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/generateReservationSlots.js";
+import { toast } from "react-toastify";
 
 export const action = async ({ request }) => {
   console.log("coin");
@@ -29,7 +30,7 @@ export const action = async ({ request }) => {
       },
     );
 
-    console.log("Rendez-vous confirmé :", data);
+    toast.success("Rendez-vous confirmé");
 
     return redirect("/");
   } catch (error) {
