@@ -206,7 +206,7 @@ const Appointment = () => {
           htmlFor="speciality"
           className="my-4 text-center text-xl font-semibold"
         >
-          <h2>Type de consultation</h2>
+          Type de consultation
         </label>
         <select
           name="speciality"
@@ -229,7 +229,7 @@ const Appointment = () => {
               htmlFor="doctor"
               className="my-4 text-center text-xl font-semibold"
             >
-              <h2>Choissisez votre médecin</h2>
+              Choissisez votre médecin
             </label>
             <select
               name="doctor"
@@ -302,7 +302,11 @@ const Appointment = () => {
               </button>
             </form>
             <form onSubmit={() => submitForm(event)}>
-              <input type="submit" value="Confirmer" className="btn" />
+              <input
+                type="submit"
+                value="Confirmer"
+                className="btn btn-primary text-base-100 hover:border-secondary hover:bg-secondary"
+              />
             </form>
           </div>
         </div>

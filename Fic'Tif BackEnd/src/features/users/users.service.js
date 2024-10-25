@@ -1,7 +1,7 @@
 import User from "./users.model.js";
 
-const get = (id) => {
-	return User.findById(id);
+const get = (email) => {
+	return User.findOne(email);
 };
 
 const getAllByOptions = async (options) => {

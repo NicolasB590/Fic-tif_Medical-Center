@@ -5,9 +5,12 @@ import Home from "./pages/Home.jsx";
 import Services from "./pages/Services.jsx";
 import Appointment from "./pages/Appointment.jsx";
 import { action as appointmentAction } from "./pages/Appointment.jsx";
+import { action as loginAction } from "./pages/Login.jsx";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 export const ThemeContext = createContext(null);
 
@@ -57,6 +60,18 @@ const App = () => {
           // loader: cocktailsLoader,
         },
       ],
+    },
+    {
+      path: "login",
+      // errorElement: <ErrorPage/>,
+      element: <Login />,
+      action: loginAction,
+    },
+    {
+      path: "register",
+      // errorElement: <ErrorPage/>,
+      element: <Register />,
+      // action: portalAction,
     },
   ]);
 
