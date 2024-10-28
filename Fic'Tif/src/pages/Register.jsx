@@ -62,6 +62,23 @@ const Register = () => {
           <Form className="flex flex-col gap-4" method="post">
             <h3 className="text-2xl font-semibold">Inscription</h3>
             <div className="flex gap-4">
+              <div className="flex min-w-28 flex-col">
+                <label htmlFor="gender" className="text-lg">
+                  Identité
+                </label>
+                <select
+                  name="gender"
+                  className="select select-bordered w-full max-w-xs text-primary"
+                  defaultValue={""}
+                  required
+                >
+                  <option value="" disabled>
+                    Genre
+                  </option>
+                  <option value="man">Homme</option>
+                  <option value="woman">Femme</option>
+                </select>
+              </div>
               <div className="flex flex-col">
                 <label htmlFor="lastname" className="text-lg">
                   Nom
@@ -71,6 +88,7 @@ const Register = () => {
                   name="lastname"
                   placeholder="Votre nom"
                   className="input input-bordered w-full max-w-xs text-primary"
+                  required
                 />
               </div>
               <div className="flex flex-col">
@@ -82,13 +100,14 @@ const Register = () => {
                   name="firstname"
                   placeholder="Votre prénom"
                   className="input input-bordered w-full max-w-xs text-primary"
+                  required
                 />
               </div>
             </div>
-            <div>
+            <div className="flex w-full flex-col">
               <h3 className="text-lg">Date de naissance</h3>
               <div className="flex justify-center gap-4">
-                <div className="flex flex-col">
+                <div className="flex flex-1 flex-col">
                   <label htmlFor="day" className="text-lg">
                     Jour
                   </label>
@@ -96,6 +115,7 @@ const Register = () => {
                     name="day"
                     className="select select-bordered w-full max-w-xs text-primary"
                     defaultValue={""}
+                    required
                   >
                     <option disabled value={""}>
                       Jour
@@ -107,7 +127,7 @@ const Register = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-1 flex-col">
                   <label htmlFor="month" className="text-lg">
                     Mois
                   </label>
@@ -115,6 +135,7 @@ const Register = () => {
                     name="month"
                     className="select select-bordered w-full max-w-xs text-primary"
                     defaultValue={""}
+                    required
                   >
                     <option disabled value={""}>
                       Mois
@@ -126,7 +147,7 @@ const Register = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-1 flex-col">
                   <label htmlFor="year" className="text-lg">
                     Année
                   </label>
@@ -134,6 +155,7 @@ const Register = () => {
                     name="year"
                     className="select select-bordered w-full max-w-xs text-primary"
                     defaultValue={""}
+                    required
                   >
                     <option disabled value={""}>
                       Année
@@ -149,7 +171,7 @@ const Register = () => {
             </div>
 
             <div className="flex gap-4">
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col">
                 <label htmlFor="email" className="text-lg">
                   Adresse Email
                 </label>
@@ -158,9 +180,10 @@ const Register = () => {
                   name="email"
                   placeholder="email@example.com"
                   className="input input-bordered w-full max-w-xs text-primary"
+                  required
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-1 flex-col">
                 <label htmlFor="password" className="text-lg">
                   Mot de passe
                 </label>
@@ -169,13 +192,14 @@ const Register = () => {
                   name="password"
                   placeholder="Votre mot de passe"
                   className="input input-bordered w-full max-w-xs text-primary"
+                  required
                 />
               </div>
             </div>
             <input
               type="submit"
               value="Inscription"
-              className="btn btn-primary font-bold text-base-100 hover:border-secondary hover:bg-secondary"
+              className="btn btn-primary font-bold text-base-100 hover:border-accent hover:bg-accent"
             />
           </Form>
         </div>
