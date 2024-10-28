@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useFetcher } from "react-router-dom";
 import { toast } from "react-toastify";
+import ConditionOfUse from "../components/ConditionOfUse.jsx";
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
@@ -26,6 +27,13 @@ const years = Array.from(
 export const action = async ({ request }) => {
   const formData = await request.formData();
 
+  console.log("===========");
+  console.log(request);
+  console.log("===========");
+
+  console.log(formData);
+  console.log("===========");
+
   const {
     email,
     password,
@@ -35,9 +43,9 @@ export const action = async ({ request }) => {
     month,
     year,
     gender,
-    adress,
+    address,
     phone,
-  } = formData;
+  } = Object.fromEntries(formData);
 
   console.log(gender);
   console.log(firstname);
@@ -46,7 +54,7 @@ export const action = async ({ request }) => {
   console.log(month);
   console.log(year);
 
-  console.log(adress);
+  console.log(address);
   console.log(phone);
 
   console.log(email);
@@ -69,6 +77,9 @@ const Register = () => {
     email: "",
     password: "",
   });
+  const fetcher = useFetcher();
+  const modalRef = useRef(null);
+  const [isAgreed, setIsAgreed] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,6 +133,31 @@ const Register = () => {
     }
   }, [[data.day, data.month, data.year]]);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    modalRef.current.showModal();
+  };
+
+  const confirmSubmission = async () => {
+    if (!isAgreed) {
+      toast.error(
+        "Vous devez accepter les conditions d'utilisation pour poursuivre l'inscription.",
+      );
+      modalRef.current.close();
+      return;
+    }
+
+    fetcher.submit(data, {
+      method: "post",
+      action: "/register",
+    });
+
+    modalRef.current.close();
+    toast.success("Votre compte à été créé avec succés!");
+    //mettre ici la redirection vers l'accueil
+  };
+
   return (
     <div className="flex h-screen items-center justify-center py-4">
       <Link
@@ -143,7 +179,7 @@ const Register = () => {
           </Link>
         </div>
         <div className="flex h-full w-full flex-1 flex-col items-center justify-center rounded-3xl bg-secondary p-4 text-center text-base-100">
-          <Form className="flex w-full flex-col gap-4" method="post">
+          <Form className="flex w-full flex-col gap-4">
             <div className="flex w-full items-center justify-center gap-2">
               <h3 className="text-2xl font-semibold">Inscription</h3>
               <span className="text-xs italic text-base-300">{`${currentStep}/3`}</span>
@@ -163,10 +199,9 @@ const Register = () => {
                         value={data.gender}
                         onChange={handleChange}
                         className="select select-bordered select-sm w-full max-w-xs text-primary md:select-md"
-                        defaultValue={""}
                         required
                       >
-                        <option value="" disabled>
+                        <option disabled value="">
                           -- Genre --
                         </option>
                         <option value="man">Homme</option>
@@ -365,12 +400,66 @@ const Register = () => {
                   Suivant
                 </button>
               ) : (
-                <button type="submit" className="btn btn-primary flex-1">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="btn btn-primary flex-1"
+                >
                   Inscription
                 </button>
               )}
             </div>
           </Form>
+
+          {/* MODALE */}
+          <dialog id="my_modal_5" className="modal" ref={modalRef}>
+            <div className="modal-box flex flex-col gap-2 text-primary">
+              <div className="flex flex-col gap-2">
+                <h4 className="text-2xl font-bold text-secondary">
+                  Conditions d&apos;utilisation des données
+                </h4>
+                <p>
+                  Veuillez lire et accepter nos conditions d&apos;utilisation
+                  concernant la gestion de vos données personnelles conformément
+                  au RGPD.
+                </p>
+                <ConditionOfUse />
+              </div>
+              <label className="label m-auto w-fit cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isAgreed}
+                  onChange={() => setIsAgreed(!isAgreed)}
+                  className="checkbox"
+                />
+                <span className="label-text ml-2">
+                  J&apos;accepte les conditions d&apos;utilisation.
+                </span>
+              </label>
+              <form method="dialog">
+                <button className="btn btn-circle btn-primary btn-sm absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <div>
+                <button
+                  className="btn btn-secondary mr-2"
+                  onClick={() => modalRef.current.close()}
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={confirmSubmission}
+                  className="btn btn-primary ml-2"
+                >
+                  Confirmer
+                </button>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
         </div>
       </div>
     </div>
