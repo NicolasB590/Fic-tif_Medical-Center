@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
 import { Form, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
@@ -74,8 +75,34 @@ const Register = () => {
     setData({ ...data, [name]: value });
   };
 
+  const validateCurrentStep = () => {
+    if (currentStep === 1) {
+      return (
+        data.gender &&
+        data.lastname &&
+        data.firstname &&
+        data.day &&
+        data.month &&
+        data.year
+      );
+    }
+    if (currentStep === 2) {
+      return data.address && data.phone;
+    }
+    if (currentStep === 3) {
+      return data.email && data.password;
+    }
+    return false;
+  };
+
   const nextStep = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, 3));
+    if (validateCurrentStep()) {
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    } else {
+      toast.error(
+        "Veuillez remplir tous les champs avant de passer à la suite",
+      );
+    }
   };
 
   const prevStep = () => {
@@ -319,12 +346,12 @@ const Register = () => {
               </div>
             )}
 
-            <div className="mt-4 flex justify-between">
+            <div className="mt-4 flex justify-between gap-4">
               {currentStep > 1 && (
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="btn btn-accent"
+                  className="btn btn-accent flex-1"
                 >
                   Retour
                 </button>
@@ -333,12 +360,12 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="btn btn-primary"
+                  className="btn btn-primary flex-1"
                 >
                   Suivant
                 </button>
               ) : (
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary flex-1">
                   Inscription
                 </button>
               )}
