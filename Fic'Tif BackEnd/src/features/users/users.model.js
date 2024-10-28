@@ -39,7 +39,7 @@ const UserSchema = new Schema({
 		required: [true, "Veuillez fournir un mot de passe"],
 		minlength: 6,
 	},
-	adress: {
+	address: {
 		type: String,
 		required: [true, "Veuillez fournir une adresse"],
 		minlength: 8,
@@ -54,6 +54,11 @@ const UserSchema = new Schema({
 		type: String,
 		enum: ["patient", "doctor"],
 		required: [true, "Impossible de déterminer le rôle de l'utilisateur"],
+	},
+	gender: {
+		type: String,
+		emun: ["man", "woman"],
+		required: true,
 	},
 });
 

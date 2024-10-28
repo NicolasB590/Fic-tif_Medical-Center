@@ -23,7 +23,7 @@ const AppointmentSchema = new Schema(
 		status: {
 			type: String,
 			enum: ["pending", "canceled", "done"],
-			default: "pending", // Valeur par défaut
+			default: "pending",
 			required: true,
 		},
 	},

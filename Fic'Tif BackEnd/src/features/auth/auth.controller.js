@@ -11,7 +11,9 @@ const registerPatient = async (req, res) => {
 	const userId = user._id;
 	const patient = await patientService.create(userId);
 	const token = user.createAccessToken();
-	res.status(StatusCodes.CREATED).json({ user, token });
+	res
+		.status(StatusCodes.CREATED)
+		.json({ user, token, msg: "Compte créé avec succés !" });
 };
 
 const registerDoctor = async (req, res) => {

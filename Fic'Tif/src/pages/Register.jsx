@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
-import { Form, Link, useFetcher } from "react-router-dom";
+import { Form, Link, redirect, useFetcher } from "react-router-dom";
 import { toast } from "react-toastify";
 import ConditionOfUse from "../components/ConditionOfUse.jsx";
+import axios from "axios";
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
@@ -26,14 +27,6 @@ const years = Array.from(
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
-
-  console.log("===========");
-  console.log(request);
-  console.log("===========");
-
-  console.log(formData);
-  console.log("===========");
-
   const {
     email,
     password,
@@ -60,7 +53,30 @@ export const action = async ({ request }) => {
   console.log(email);
   console.log(password);
 
-  return null;
+  try {
+    const { data } = await axios.post(
+      "http://localhost:5000/api/v1/auth/register/patient",
+      {
+        birthDate: `${month}/${day}/${year}`,
+        firstName: firstname,
+        lastName: lastname,
+        address,
+        phoneNumber: phone,
+        email,
+        password,
+        gender,
+      },
+    );
+
+    toast.success(data.msg);
+
+    return redirect("/");
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.msg || "Erreur lors de la création du compte";
+    toast.error(errorMessage);
+    return null;
+  }
 };
 
 const Register = () => {
@@ -154,7 +170,6 @@ const Register = () => {
     });
 
     modalRef.current.close();
-    toast.success("Votre compte à été créé avec succés!");
     //mettre ici la redirection vers l'accueil
   };
 

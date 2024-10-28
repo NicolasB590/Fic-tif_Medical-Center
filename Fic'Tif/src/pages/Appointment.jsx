@@ -35,6 +35,7 @@ export const action = async ({ request }) => {
     const errorMessage =
       error.response?.data?.msg || "Erreur lors de la prise de rendez-vous";
     toast.error(errorMessage);
+    return null;
   }
 };
 
