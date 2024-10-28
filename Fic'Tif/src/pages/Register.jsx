@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
 import { Form, Link } from "react-router-dom";
 
@@ -38,6 +39,37 @@ export const action = async ({ request }) => {
 };
 
 const Register = () => {
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
+  const handleDayChange = (e) => {
+    setSelectedDay(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+  // Change la valeur de "Day" en fonction du mois et de l'année sélectionnés
+  useEffect(() => {
+    if (selectedDay && selectedMonth && selectedYear) {
+      const day = parseInt(selectedDay);
+      const month = parseInt(selectedMonth);
+      const year = parseInt(selectedYear);
+
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      if (day > daysInMonth) {
+        setSelectedDay(daysInMonth);
+      }
+    }
+  }, [selectedDay, selectedMonth, selectedYear]);
+
   return (
     <div className="flex h-screen items-center justify-center py-4">
       <Link
@@ -114,10 +146,11 @@ const Register = () => {
                   <select
                     name="day"
                     className="select select-bordered w-full max-w-xs text-primary"
-                    defaultValue={""}
+                    value={selectedDay}
+                    onChange={handleDayChange}
                     required
                   >
-                    <option disabled value={""}>
+                    <option disabled value="">
                       Jour
                     </option>
                     {days.map((day) => (
@@ -134,10 +167,11 @@ const Register = () => {
                   <select
                     name="month"
                     className="select select-bordered w-full max-w-xs text-primary"
-                    defaultValue={""}
+                    value={selectedMonth}
+                    onChange={handleMonthChange}
                     required
                   >
-                    <option disabled value={""}>
+                    <option disabled value="">
                       Mois
                     </option>
                     {months.map((month, index) => (
@@ -154,10 +188,11 @@ const Register = () => {
                   <select
                     name="year"
                     className="select select-bordered w-full max-w-xs text-primary"
-                    defaultValue={""}
+                    value={selectedYear}
+                    onChange={handleYearChange}
                     required
                   >
-                    <option disabled value={""}>
+                    <option disabled value="">
                       Année
                     </option>
                     {years.map((year) => (
@@ -207,4 +242,5 @@ const Register = () => {
     </div>
   );
 };
+
 export default Register;
