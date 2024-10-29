@@ -1,6 +1,15 @@
 import axios from "axios";
+import { useContext } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
-import { Form, Link, redirect } from "react-router-dom";
+import {
+  Form,
+  Link,
+  redirect,
+  useFetcher,
+  useActionData,
+} from "react-router-dom";
+import { UserContext } from "../App.jsx";
+import { toast } from "react-toastify";
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -12,23 +21,51 @@ export const action = async ({ request }) => {
   console.log(password);
 
   try {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/v1/auth/login",
-      {
-        email,
-        password,
-      },
-    );
+    const { data } = await axios.post("/api/v1/auth/login", {
+      email,
+      password,
+    });
 
-    console.log(data);
+    return redirect("/");
   } catch (error) {
-    console.log(error);
+    toast.error(
+      error.response?.data?.msg ||
+        "Erreur lors de la récupération de l'utilisateur",
+    );
   }
   return null;
   // return redirect("/")
 };
 
 const Login = () => {
+  const fetcher = useFetcher();
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+  // const fecthData = useActionData();
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+
+    fetcher.submit(data, {
+      method: "post",
+      action: "/login",
+    });
+
+    const fecthData = fetcher.data;
+
+    console.log(fecthData);
+
+    if (fetcher.data) {
+      if (fetcher.data.user) {
+        setGlobalUser(fetcher.data.user);
+      } else if (fetcher.data.error) {
+        toast.error("Erreur lors de la récupération de l'utilisateur");
+      }
+    }
+    console.log(fetcher.data);
+  };
+
   return (
     <div className="flex h-screen items-center justify-center py-4">
       <Link
@@ -39,7 +76,7 @@ const Login = () => {
       </Link>
       <div className="flex min-h-[90dvh] w-[90dvw] max-w-5xl flex-col items-center gap-4 rounded-3xl bg-base-100 md:h-72 md:flex-row">
         <div className="flex h-full w-full flex-1 flex-col items-center justify-center rounded-3xl bg-secondary p-4 text-center text-base-100">
-          <Form className="flex flex-col gap-4" method="post">
+          <Form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <h3 className="text-2xl font-semibold">Connection</h3>
             <div className="flex flex-col">
               <label htmlFor="email" className="text-lg">

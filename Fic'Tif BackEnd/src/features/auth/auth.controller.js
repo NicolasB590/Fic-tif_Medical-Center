@@ -3,6 +3,7 @@ import * as usersService from "../users/users.service.js";
 import * as patientService from "../patients/patients.service.js";
 import * as doctorsService from "../doctors/doctors.service.js";
 import { UnauthenticatedError } from "../../errors/index.js";
+import jwt from "jsonwebtoken";
 import User from "../users/users.model.js";
 
 const registerPatient = async (req, res) => {
@@ -27,25 +28,29 @@ const registerDoctor = async (req, res) => {
 };
 
 const login = async (req, res) => {
-	console.log(req.body);
-	console.log(req.body.email);
-	console.log(req.body.password);
-
 	const user = await usersService.get({ email: req.body.email });
 	if (!user) {
 		throw new UnauthenticatedError("Identifiants invalides.");
 	}
 
-	console.log(user);
+	const id = user._id;
+	const email = user.email;
 
-	const isPasswordCorrect = await user.comparePasswords(req.body.password);
+	const token = jwt.sign({ id, email }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_LIFETIME,
+	});
 
-	if (!isPasswordCorrect) {
-		throw new UnauthenticatedError("Identifiants invalides.");
-	}
+	const oneDay = 24 * 60 * 60 * 1000;
+	const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-	const token = user.createAccessToken();
-	res.status(StatusCodes.OK).json({ user: { userId: user._id, token } });
+	res.cookie("accessToken", token, {
+		HttpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+		expires: new Date(Date.now() + oneDay),
+	});
+
+	res.status(StatusCodes.OK).json({ user: { userId: id } });
 };
 
 export { login, registerPatient, registerDoctor };

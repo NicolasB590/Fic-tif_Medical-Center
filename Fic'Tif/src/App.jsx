@@ -14,6 +14,7 @@ import Register from "./pages/Register.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
 
 export const ThemeContext = createContext(null);
+export const UserContext = createContext(null);
 
 const initTheme = () => {
   const storedTheme = localStorage.getItem("theme");
@@ -28,6 +29,7 @@ const initTheme = () => {
 
 const App = () => {
   const [theme, setTheme] = useState(() => initTheme());
+  const [globalUser, setGlobalUser] = useState(null);
 
   const toggleTheme = (theme) => {
     setTheme(theme);
@@ -78,22 +80,24 @@ const App = () => {
 
   return (
     <main className="relative flex min-h-dvh flex-col items-center bg-base-300">
-      <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <ToastContainer
-          position="bottom-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme={theme === "cupcake" ? "light" : "dark"}
-          transition={Bounce}
-        />
-        <RouterProvider router={router} />
-      </ThemeContext.Provider>
+      <UserContext.Provider value={{ globalUser, setGlobalUser }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={theme === "cupcake" ? "light" : "dark"}
+            transition={Bounce}
+          />
+          <RouterProvider router={router} />
+        </ThemeContext.Provider>
+      </UserContext.Provider>
     </main>
   );
 };

@@ -10,6 +10,7 @@ import express from "express";
 import connectDB from "./config/db.config.js";
 import errorHandler from "./middlewares/error-handler.js";
 import notFound from "./middlewares/not-found.middleware.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(helmet());
@@ -33,6 +34,8 @@ app.use(cors());
 connectDB();
 
 app.use(express.json());
+
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 import { auth } from "./features/auth/index.js";
 app.use("/api/v1/auth", auth);

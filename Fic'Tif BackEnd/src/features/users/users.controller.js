@@ -36,7 +36,6 @@ const getAllByOptions = async (req, res) => {
 // Met à jour un utilisateur
 const update = async (req, res) => {
 	const id = req.params;
-	console.log(req.body);
 
 	const updatedUser = await userService.update(id.id, req.body);
 	if (!updatedUser) {
@@ -74,4 +73,17 @@ const remove = async (req, res) => {
 		.json({ deletedUser, msg: "Utilisateur supprimé avec succès" });
 };
 
-export { get, update, remove, getAllByOptions };
+const isLogged = async (req, res) => {
+	const { email } = req.user;
+
+	const user = userService.isLogged(email);
+
+	if (!user) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Utilisateur non trouvé" });
+	}
+	res.status(StatusCodes.OK).json({ user, msg: "Utilisateur connecté" });
+};
+
+export { get, update, remove, getAllByOptions, isLogged };

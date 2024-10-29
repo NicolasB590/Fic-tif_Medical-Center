@@ -28,9 +28,7 @@ const getAllByOptions = async (options) => {
 		}
 	}
 
-	const users = await User.find(query).select(
-		"-_id -password -adress -role -birthDate"
-	);
+	const users = await User.find(query).select("-_id -password -role");
 
 	return users;
 };
@@ -47,4 +45,8 @@ const create = (data) => {
 	return User(data).save();
 };
 
-export { get, update, remove, create, getAllByOptions };
+const isLogged = () => {
+	return User.findOne(email).select("-password -role");
+};
+
+export { get, update, remove, create, getAllByOptions, isLogged };

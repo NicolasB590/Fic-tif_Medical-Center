@@ -40,19 +40,6 @@ export const action = async ({ request }) => {
     phone,
   } = Object.fromEntries(formData);
 
-  console.log(gender);
-  console.log(firstname);
-  console.log(lastname);
-  console.log(day);
-  console.log(month);
-  console.log(year);
-
-  console.log(address);
-  console.log(phone);
-
-  console.log(email);
-  console.log(password);
-
   try {
     const { data } = await axios.post(
       "http://localhost:5000/api/v1/auth/register/patient",
@@ -170,7 +157,7 @@ const Register = () => {
     });
 
     modalRef.current.close();
-    //mettre ici la redirection vers l'accueil
+    return redirect("/");
   };
 
   return (
