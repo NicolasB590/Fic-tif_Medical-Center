@@ -46,7 +46,7 @@ const create = (data) => {
 };
 
 const isLogged = (email) => {
-	return User.findOne({ email }).select("-password -role");
+	return User.findOne({ email }).select("-password");
 };
 
 export { get, update, remove, create, getAllByOptions, isLogged };

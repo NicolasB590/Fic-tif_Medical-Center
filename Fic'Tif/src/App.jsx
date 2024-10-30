@@ -12,7 +12,8 @@ import Login from "./pages/Login.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
-import { loader as homeLoader } from "./pages/Home.jsx";
+import { loader as sharedLayoutLoader } from "./layouts/SharedLayout.jsx";
+import Profile from "./pages/Profile.jsx";
 
 export const ThemeContext = createContext(null);
 export const UserContext = createContext(null);
@@ -43,12 +44,13 @@ const App = () => {
       path: "/",
       // errorElement: <ErrorPage />,
       element: <SharedLayout />,
+      loader: sharedLayoutLoader,
       children: [
         {
           index: true,
           element: <Home />,
           errorElement: <div>Error</div>,
-          loader: homeLoader,
+          // loader: homeLoader,
         },
         {
           path: "doctors",
@@ -61,6 +63,12 @@ const App = () => {
           element: <Appointment />,
           errorElement: <div>Error</div>,
           action: appointmentAction,
+          // loader: cocktailsLoader,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
+          errorElement: <div>Error</div>,
           // loader: cocktailsLoader,
         },
       ],
