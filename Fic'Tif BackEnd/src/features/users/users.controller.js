@@ -74,9 +74,11 @@ const remove = async (req, res) => {
 };
 
 const isLogged = async (req, res) => {
-	const { email } = req.user;
+	console.log(req.user.email);
 
-	const user = userService.isLogged(email);
+	const email = req.user.email;
+
+	const user = await userService.isLogged(email);
 
 	if (!user) {
 		return res

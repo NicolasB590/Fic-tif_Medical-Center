@@ -12,6 +12,7 @@ import Login from "./pages/Login.jsx";
 import { action as loginAction } from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
+import { loader as homeLoader } from "./pages/Home.jsx";
 
 export const ThemeContext = createContext(null);
 export const UserContext = createContext(null);
@@ -47,7 +48,7 @@ const App = () => {
           index: true,
           element: <Home />,
           errorElement: <div>Error</div>,
-          // loader: cocktailsLoader,
+          loader: homeLoader,
         },
         {
           path: "doctors",

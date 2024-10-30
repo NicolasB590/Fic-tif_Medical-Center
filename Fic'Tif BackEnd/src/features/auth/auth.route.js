@@ -4,6 +4,8 @@ import validate from "../../middlewares/validation.middleware.js";
 import { LoginUserSchema, RegisterUserSchema } from "../users/users.schema.js";
 import { RegisterDoctorSchema } from "../doctors/doctors.schema.js";
 import * as authController from "./auth.controller.js";
+import * as usersController from "../users/users.controller.js";
+import authenticateUser from "../../middlewares/auth.middleware.js";
 
 //* Patients
 router.post(
@@ -20,5 +22,7 @@ router.post(
 );
 
 router.post("/login", validate(LoginUserSchema), authController.login);
+
+router.get("/isLogged", authenticateUser, usersController.isLogged);
 
 export default router;

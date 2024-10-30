@@ -1,13 +1,7 @@
 import axios from "axios";
 import { useContext } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
-import {
-  Form,
-  Link,
-  redirect,
-  useFetcher,
-  useActionData,
-} from "react-router-dom";
+import { Form, Link, redirect, useFetcher } from "react-router-dom";
 import { UserContext } from "../App.jsx";
 import { toast } from "react-toastify";
 
@@ -21,7 +15,7 @@ export const action = async ({ request }) => {
   console.log(password);
 
   try {
-    const { data } = await axios.post("/api/v1/auth/login", {
+    await axios.post("/api/v1/auth/login", {
       email,
       password,
     });
@@ -39,7 +33,7 @@ export const action = async ({ request }) => {
 
 const Login = () => {
   const fetcher = useFetcher();
-  const { globalUser, setGlobalUser } = useContext(UserContext);
+  const { setGlobalUser } = useContext(UserContext);
   // const fecthData = useActionData();
 
   const handleLogin = async (event) => {

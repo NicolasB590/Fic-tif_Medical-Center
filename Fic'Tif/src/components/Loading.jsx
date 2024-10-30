@@ -2,7 +2,7 @@ const Loading = () => {
   return (
     <div>
       <img
-        src={`/public/bouncing-ball.svg`}
+        src={`/bouncing-ball.svg`}
         alt="Chargement en cours"
         className="img loading"
       />

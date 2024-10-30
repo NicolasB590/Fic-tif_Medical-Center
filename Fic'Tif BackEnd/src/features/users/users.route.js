@@ -12,6 +12,6 @@ router.get("/", usersController.getAllByOptions);
 router.get("/:id", usersController.get);
 router.put("/:id", usersController.update);
 router.delete("/:id", usersController.remove);
-router.get("/isLogged", authenticateUser, usersController.isLogged);
+router.get("/isLogged/", authenticateUser, usersController.isLogged);
 
 export default router;
