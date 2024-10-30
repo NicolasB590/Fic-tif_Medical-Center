@@ -1,4 +1,4 @@
-import * as userService from "./users.service.js";
+import * as usersService from "./users.service.js";
 import * as doctorService from "../doctors/doctors.service.js";
 import * as patientService from "../patients/patients.service.js";
 import { StatusCodes } from "http-status-codes";
@@ -7,7 +7,7 @@ import { StatusCodes } from "http-status-codes";
 const get = async (req, res) => {
 	const id = req.params;
 
-	const user = await userService.get(id.id);
+	const user = await usersService.get(id.id);
 
 	let userInfo = user;
 
@@ -29,7 +29,7 @@ const get = async (req, res) => {
 const getAllByOptions = async (req, res) => {
 	console.log(req.query);
 
-	const users = await userService.getAllByOptions(req.query);
+	const users = await usersService.getAllByOptions(req.query);
 	res.status(StatusCodes.OK).json({ users });
 };
 
@@ -37,7 +37,7 @@ const getAllByOptions = async (req, res) => {
 const update = async (req, res) => {
 	const id = req.params;
 
-	const updatedUser = await userService.update(id.id, req.body);
+	const updatedUser = await usersService.update(id.id, req.body);
 	if (!updatedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
@@ -62,7 +62,7 @@ const update = async (req, res) => {
 // Supprime un utilisateur
 const remove = async (req, res) => {
 	const id = req.params;
-	const deletedUser = await userService.remove(id.id);
+	const deletedUser = await usersService.remove(id.id);
 	if (!deletedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)
@@ -73,19 +73,4 @@ const remove = async (req, res) => {
 		.json({ deletedUser, msg: "Utilisateur supprimé avec succès" });
 };
 
-const isLogged = async (req, res) => {
-	console.log(req.user.email);
-
-	const email = req.user.email;
-
-	const user = await userService.isLogged(email);
-
-	if (!user) {
-		return res
-			.status(StatusCodes.NOT_FOUND)
-			.json({ msg: "Utilisateur non trouvé" });
-	}
-	res.status(StatusCodes.OK).json({ user, msg: "Utilisateur connecté" });
-};
-
-export { get, update, remove, getAllByOptions, isLogged };
+export { get, update, remove, getAllByOptions };

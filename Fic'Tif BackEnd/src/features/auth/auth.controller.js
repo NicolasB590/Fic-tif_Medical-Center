@@ -53,4 +53,17 @@ const login = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: { userId: id } });
 };
 
-export { login, registerPatient, registerDoctor };
+const isLogged = async (req, res) => {
+	const email = req.user.email;
+
+	const user = await usersService.isLogged(email);
+
+	if (!user) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Utilisateur non trouvé" });
+	}
+	res.status(StatusCodes.OK).json({ user, msg: "Utilisateur connecté" });
+};
+
+export { login, registerPatient, registerDoctor, isLogged };
