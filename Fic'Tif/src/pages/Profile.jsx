@@ -28,7 +28,7 @@ const Profile = () => {
         type="radio"
         name="my_tabs_2"
         role="tab"
-        className="tab mb-0.5 mr-2 rounded-box font-semibold transition-all duration-300 checked:text-base-100 hover:bg-accent"
+        className="tab mb-0.5 mr-2 rounded-box font-semibold text-base-100 transition-all duration-300 hover:bg-accent"
         aria-label="Profil"
         defaultChecked={initialTab === 1}
       />
@@ -43,7 +43,7 @@ const Profile = () => {
         type="radio"
         name="my_tabs_2"
         role="tab"
-        className="tab mx-2 mb-0.5 rounded-box font-semibold transition-all duration-300 checked:text-base-100 hover:bg-accent"
+        className="tab mx-2 mb-0.5 rounded-box font-semibold text-base-100 transition-all duration-300 hover:bg-accent"
         aria-label="Paramètres"
         defaultChecked={initialTab === 2}
       />
@@ -58,7 +58,7 @@ const Profile = () => {
         type="radio"
         name="my_tabs_2"
         role="tab"
-        className="tab mb-0.5 ml-2 rounded-box font-semibold transition-all duration-300 checked:text-base-100 hover:bg-accent"
+        className="tab mb-0.5 ml-2 rounded-box font-semibold text-base-100 transition-all duration-300 hover:bg-accent"
         aria-label="Agenda"
         defaultChecked={initialTab === 3}
       />

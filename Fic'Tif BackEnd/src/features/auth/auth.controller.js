@@ -53,6 +53,16 @@ const login = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: { userId: id } });
 };
 
+const logout = async (req, res) => {
+	res.clearCookie("accessToken", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+	});
+
+	res.status(StatusCodes.OK).json({ msg: "Déconnexion réussie." });
+};
+
 const isLogged = async (req, res) => {
 	const email = req.user.email;
 
@@ -66,4 +76,4 @@ const isLogged = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user, msg: "Utilisateur connecté" });
 };
 
-export { login, registerPatient, registerDoctor, isLogged };
+export { login, registerPatient, registerDoctor, isLogged, logout };

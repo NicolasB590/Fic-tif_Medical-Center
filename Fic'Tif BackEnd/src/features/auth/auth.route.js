@@ -21,6 +21,7 @@ router.post(
 );
 
 router.post("/login", validate(LoginUserSchema), authController.login);
+router.post("/logout", authController.logout);
 
 router.get("/isLogged", authenticateUser, authController.isLogged);
 

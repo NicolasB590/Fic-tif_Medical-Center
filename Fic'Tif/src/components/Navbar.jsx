@@ -4,17 +4,30 @@ import {
   PiGearSixDuotone,
   PiUserCircleDuotone,
   PiCalendarDotsDuotone,
+  PiUserCircleCheckDuotone,
+  PiUserCirclePlusDuotone,
 } from "react-icons/pi";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Link, redirect } from "react-router-dom";
+import { useContext, useState } from "react";
 import { UserContext } from "../App.jsx";
+import axios from "axios";
 
 const Navbar = () => {
-  const { globalUser } = useContext(UserContext);
-
-  console.log(
-    `NAVBAR: ${globalUser ? globalUser.firstName : "Aucun utilisateur"}`,
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+  const [defaultAvatar, setDefaultAvatar] = useState(
+    "/user-circle-duotone.svg",
   );
+
+  const handleLogout = async () => {
+    await axios("/api/v1/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    setGlobalUser(null);
+
+    return redirect("/");
+  };
 
   return (
     <div className="navbar justify-center bg-base-200">
@@ -36,62 +49,91 @@ const Navbar = () => {
             />
           </div>
           <ThemeToggler location="main" />
-          {globalUser ? (
-            <div className="dropdown dropdown-end">
+
+          <div className="dropdown dropdown-end">
+            <div
+              className="tooltip tooltip-left tooltip-primary"
+              data-tip={
+                globalUser
+                  ? `Profil de ${globalUser?.lastName} ${globalUser?.firstName}`
+                  : `Créer un compte/Se connecter`
+              }
+            >
               <div
-                className="tooltip tooltip-left tooltip-primary"
-                data-tip={`Profile de ${globalUser.lastName} ${globalUser.firstName}`}
-                // data-tip={`Sam`}
+                tabIndex={0}
+                role="button"
+                className="avatar btn btn-circle btn-ghost"
               >
                 <div
-                  tabIndex={0}
-                  role="button"
-                  className="avatar btn btn-circle btn-ghost"
+                  className="w-10 rounded-full transition duration-300"
+                  onMouseEnter={() =>
+                    setDefaultAvatar("/user-circle-duotone-secondary.svg")
+                  }
+                  onMouseLeave={() =>
+                    setDefaultAvatar("/user-circle-duotone.svg")
+                  }
                 >
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    />
-                  </div>
+                  {globalUser?.avatar ? (
+                    <img src={`${globalUser?.avatar}`} alt="Image de profil" />
+                  ) : (
+                    <img src={defaultAvatar} alt="Image de profil" />
+                  )}
                 </div>
               </div>
-
-              <ul
-                tabIndex={0}
-                className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
-              >
-                <span className="my-2 text-center font-semibold">{`${globalUser.lastName} ${globalUser.firstName}`}</span>
-                <li>
-                  <Link to="/profile" state={{ tab: 1 }}>
-                    <PiUserCircleDuotone />
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/profile" state={{ tab: 2 }}>
-                    <PiGearSixDuotone />
-                    Settings
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/profile" state={{ tab: 3 }}>
-                    <PiCalendarDotsDuotone />
-                    Agenda
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/profile" state={{ tab: 4 }}>
-                    <PiDoorOpenDuotone />
-                    Logout
-                  </Link>
-                </li>
-                <ThemeToggler location="profile" />
-              </ul>
             </div>
-          ) : (
-            ""
-          )}
+
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+            >
+              {globalUser ? (
+                <>
+                  <span className="my-2 text-center font-semibold">{`${globalUser?.lastName} ${globalUser?.firstName}`}</span>
+                  <li>
+                    <Link to="/profile" state={{ tab: 1 }}>
+                      <PiUserCircleDuotone />
+                      Profil
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/profile" state={{ tab: 2 }}>
+                      <PiGearSixDuotone />
+                      Paramètres
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/profile" state={{ tab: 3 }}>
+                      <PiCalendarDotsDuotone />
+                      Agenda
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={() => handleLogout()}>
+                      <PiDoorOpenDuotone />
+                      Déconnexion
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/login">
+                      <PiUserCircleCheckDuotone />
+                      Connexion
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/register">
+                      <PiUserCirclePlusDuotone />
+                      S&apos;enregistrer
+                    </Link>
+                  </li>
+                </>
+              )}
+
+              <ThemeToggler location="profile" />
+            </ul>
+          </div>
         </div>
       </div>
     </div>
