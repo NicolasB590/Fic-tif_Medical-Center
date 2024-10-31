@@ -7,26 +7,41 @@ import {
   PiUserCircleCheckDuotone,
   PiUserCirclePlusDuotone,
 } from "react-icons/pi";
-import { Link, redirect } from "react-router-dom";
+import {
+  Link,
+  redirect,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../App.jsx";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-const Navbar = () => {
-  const { globalUser, setGlobalUser } = useContext(UserContext);
+const Navbar = ({ user }) => {
   const [defaultAvatar, setDefaultAvatar] = useState(
     "/user-circle-duotone.svg",
   );
 
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
-    await axios("/api/v1/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
+    try {
+      await axios("/api/v1/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.log(error);
 
-    setGlobalUser(null);
+      toast.error(
+        error?.msg
+          ? error.msg
+          : "Une erreur est survenue lors de la déconnexion",
+      );
+    }
 
-    return redirect("/");
+    navigate("/");
   };
 
   return (
@@ -54,8 +69,8 @@ const Navbar = () => {
             <div
               className="tooltip tooltip-left tooltip-primary"
               data-tip={
-                globalUser
-                  ? `Profil de ${globalUser?.lastName} ${globalUser?.firstName}`
+                user
+                  ? `Profil de ${user?.lastName} ${user?.firstName}`
                   : `Créer un compte/Se connecter`
               }
             >
@@ -73,8 +88,8 @@ const Navbar = () => {
                     setDefaultAvatar("/user-circle-duotone.svg")
                   }
                 >
-                  {globalUser?.avatar ? (
-                    <img src={`${globalUser?.avatar}`} alt="Image de profil" />
+                  {user?.avatar ? (
+                    <img src={`${user?.avatar}`} alt="Image de profil" />
                   ) : (
                     <img src={defaultAvatar} alt="Image de profil" />
                   )}
@@ -86,9 +101,9 @@ const Navbar = () => {
               tabIndex={0}
               className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
             >
-              {globalUser ? (
+              {user ? (
                 <>
-                  <span className="my-2 text-center font-semibold">{`${globalUser?.lastName} ${globalUser?.firstName}`}</span>
+                  <span className="my-2 text-center font-semibold">{`${user?.lastName} ${user?.firstName}`}</span>
                   <li>
                     <Link to="/profile" state={{ tab: 1 }}>
                       <PiUserCircleDuotone />
@@ -108,10 +123,10 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link onClick={() => handleLogout()}>
+                    <button onClick={handleLogout}>
                       <PiDoorOpenDuotone />
                       Déconnexion
-                    </Link>
+                    </button>
                   </li>
                 </>
               ) : (

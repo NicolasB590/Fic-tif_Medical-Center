@@ -24,24 +24,16 @@ export const loader = async () => {
 };
 
 const SharedLayout = () => {
-  const isUser = useLoaderData();
-  const { globalUser, setGlobalUser } = useContext(UserContext);
-
-  useEffect(() => {
-    if (isUser && isUser !== globalUser) {
-      setGlobalUser(isUser.user);
-      console.log(globalUser);
-    }
-  }, [globalUser]);
+  const data = useLoaderData();
+  console.log(data, "hared");
 
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
   return (
     <>
-      <Navbar />
+      <Navbar user={data?.user} />
       <SideMenuDrawer>
         {isPageLoading ? <Loading /> : <Outlet />}
-        {/* <h1>{isUser.user.firstName}</h1> */}
       </SideMenuDrawer>
     </>
   );

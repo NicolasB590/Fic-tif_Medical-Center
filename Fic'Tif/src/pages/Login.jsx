@@ -33,7 +33,6 @@ export const action = async ({ request }) => {
 
 const Login = () => {
   const fetcher = useFetcher();
-  const { setGlobalUser } = useContext(UserContext);
   // const fecthData = useActionData();
 
   const handleLogin = async (event) => {
@@ -46,18 +45,18 @@ const Login = () => {
       action: "/login",
     });
 
-    const fecthData = fetcher.data;
+    // const fecthData = fetcher.data;
 
-    console.log(fecthData);
+    // console.log(fecthData);
 
-    if (fetcher.data) {
-      if (fetcher.data.user) {
-        setGlobalUser(fetcher.data.user);
-      } else if (fetcher.data.error) {
-        toast.error("Erreur lors de la récupération de l'utilisateur");
-      }
-    }
-    console.log(fetcher.data);
+    // if (fetcher.data) {
+    //   if (fetcher.data.user) {
+    //     setGlobalUser(fetcher.data.user);
+    //   } else if (fetcher.data.error) {
+    //     toast.error("Erreur lors de la récupération de l'utilisateur");
+    //   }
+    // }
+    // console.log(fetcher.data);
   };
 
   return (

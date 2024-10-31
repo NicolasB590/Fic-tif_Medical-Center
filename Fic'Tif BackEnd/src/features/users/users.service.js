@@ -20,8 +20,8 @@ const getAllByOptions = async (options) => {
 		if (options.email) {
 			query.email = options.email;
 		}
-		if (options.adress) {
-			query.adress = options.adress;
+		if (options.address) {
+			query.adress = options.address;
 		}
 		if (options.phoneNumber) {
 			query.phoneNumber = options.phoneNumber;
