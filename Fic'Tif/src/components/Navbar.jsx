@@ -7,12 +7,7 @@ import {
   PiUserCircleCheckDuotone,
   PiUserCirclePlusDuotone,
 } from "react-icons/pi";
-import {
-  Link,
-  redirect,
-  useNavigate,
-  useOutletContext,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../App.jsx";
 import axios from "axios";
@@ -24,6 +19,7 @@ const Navbar = ({ user }) => {
   );
 
   const navigate = useNavigate();
+  const { setGlobalUser } = useContext(UserContext);
 
   const handleLogout = async () => {
     try {
@@ -31,6 +27,8 @@ const Navbar = ({ user }) => {
         method: "POST",
         credentials: "include",
       });
+
+      setGlobalUser(null);
     } catch (error) {
       console.log(error);
 

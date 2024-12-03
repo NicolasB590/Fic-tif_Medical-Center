@@ -26,11 +26,22 @@ export const loader = async () => {
 const SharedLayout = () => {
   const data = useLoaderData();
   console.log(data, "hared");
+  const { globalUser, setGlobalUser } = useContext(UserContext);
+
+  if (globalUser === null && data) {
+    setGlobalUser(data.user);
+  }
 
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
+
+  const test = () => {
+    console.log(globalUser);
+  };
+
   return (
     <>
+      <button onClick={() => test()}>go</button>
       <Navbar user={data?.user} />
       <SideMenuDrawer>
         {isPageLoading ? <Loading /> : <Outlet />}

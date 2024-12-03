@@ -8,6 +8,8 @@ import UserProfile from "../components/UserProfile.jsx";
 
 const Profile = () => {
   const { globalUser } = useContext(UserContext);
+  console.log(globalUser.role);
+
   const navigate = useNavigate();
   let { state } = useLocation();
 
