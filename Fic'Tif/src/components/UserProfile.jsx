@@ -99,21 +99,28 @@ const UserProfile = ({ type }) => {
               <span className="self-end text-base md:text-2xl">{`${globalUser.lastName} ${globalUser.firstName}`}</span>
             </div>
           </div>
-          <div className="flex flex-col gap-3">
+          <dl className="m-auto flex flex-col gap-3 md:w-5/6">
             {["email", "address", "birthDate", "phoneNumber"].map(
               (field, index) => (
-                <p className="flex items-center gap-2" key={index}>
-                  {field === "birthDate"
-                    ? "Date de naissance : "
-                    : `${field.charAt(0).toUpperCase() + field.slice(1)} : `}
+                <div
+                  className="grid md:grid-cols-[14rem_1fr] md:gap-2"
+                  key={index}
+                >
+                  {field === "birthDate" ? (
+                    <dt className="font-bold">{"Date de naissance : "}</dt>
+                  ) : (
+                    <dt className="font-bold">
+                      {field.charAt(0).toUpperCase() + field.slice(1) + ` : `}
+                    </dt>
+                  )}
                   {isEditing[field] ? (
-                    <>
+                    <div className="grid grid-cols-[1fr_6rem] gap-2">
                       <input
                         type={field === "birthDate" ? "date" : "text"}
                         name={field}
                         value={formData[field]}
                         onChange={handleChange}
-                        className="input input-bordered w-6/12"
+                        className="input input-bordered max-w-36 md:max-w-full"
                       />
                       <button
                         onClick={() => handleSave(field)}
@@ -121,22 +128,22 @@ const UserProfile = ({ type }) => {
                       >
                         Enregistrer
                       </button>
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      <span>{formData[field]}</span>
+                    <div className="grid grid-cols-[1fr_4rem] gap-2">
+                      <dd className="self-center">{formData[field]}</dd>
                       <button
                         onClick={() => handleEditClick(field)}
-                        className="btn btn-ghost text-2xl text-primary transition duration-300 hover:text-secondary"
+                        className="btn btn-ghost self-center text-xl text-primary transition duration-300 hover:text-secondary md:text-2xl"
                       >
                         <PiNotePencilDuotone />
                       </button>
-                    </>
+                    </div>
                   )}
-                </p>
+                </div>
               ),
             )}
-          </div>
+          </dl>
         </div>
       )}
     </>

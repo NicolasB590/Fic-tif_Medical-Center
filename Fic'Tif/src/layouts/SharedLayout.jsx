@@ -2,7 +2,7 @@ import { Outlet, useLoaderData, useNavigation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import SideMenuDrawer from "../components/SideMenuDrawer.jsx";
 import Loading from "../components/Loading.jsx";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../App.jsx";
 
@@ -35,13 +35,8 @@ const SharedLayout = () => {
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
 
-  const test = () => {
-    console.log(globalUser);
-  };
-
   return (
     <>
-      <button onClick={() => test()}>go</button>
       <Navbar user={data?.user} />
       <SideMenuDrawer>
         {isPageLoading ? <Loading /> : <Outlet />}
