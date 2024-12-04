@@ -1,5 +1,5 @@
-import { useContext, useEffect } from "react";
-import { UserContext } from "../App.jsx";
+import { useEffect } from "react";
+import { useAuth } from "../context/useAuth.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import PatientAgenda from "../components/PatientAgenda.jsx";
 import DoctorAgenda from "../components/DoctorAgenda.jsx";
@@ -7,8 +7,15 @@ import Settings from "../components/Settings.jsx";
 import UserProfile from "../components/UserProfile.jsx";
 
 const Profile = () => {
-  const { globalUser } = useContext(UserContext);
-  console.log(globalUser.role);
+  const { user, checkIfLoggedIn } = useAuth();
+  // const [checker, setChecker] = useState(null);
+  // console.log(JSON.stringify(user, null, 2));
+
+  if (user === null) {
+    checkIfLoggedIn();
+  }
+
+  console.log(user);
 
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -16,10 +23,13 @@ const Profile = () => {
   const initialTab = state ? state.tab : 1;
 
   useEffect(() => {
-    if (!globalUser) {
+    if (!user) {
+      console.log("coin");
+
+      // checkIfLoggedIn();
       navigate("/");
     }
-  }, []);
+  }, [user, navigate]);
 
   return (
     <div
@@ -38,7 +48,7 @@ const Profile = () => {
         role="tabpanel"
         className="tab-content h-full rounded-box border-base-300 bg-base-100 p-6"
       >
-        <UserProfile type={globalUser.role} />
+        <UserProfile type={user.role} />
       </div>
 
       <input
@@ -68,7 +78,7 @@ const Profile = () => {
         role="tabpanel"
         className="tab-content h-full rounded-box border-base-300 bg-base-100 p-6"
       >
-        {globalUser.role === "patient" ? <PatientAgenda /> : <DoctorAgenda />}
+        {user.role === "patient" ? <PatientAgenda /> : <DoctorAgenda />}
       </div>
     </div>
   );

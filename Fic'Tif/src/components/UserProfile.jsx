@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
-import { UserContext } from "../App.jsx";
+import { useState } from "react";
+// import { UserContext } from "../App.jsx";
+import { useAuth } from "../context/useAuth.jsx";
 import {
   PiNotePencilDuotone,
   PiStethoscopeDuotone,
@@ -7,7 +8,10 @@ import {
 } from "react-icons/pi";
 
 const UserProfile = ({ type }) => {
-  const { globalUser } = useContext(UserContext);
+  // const { globalUser } = useContext(UserContext);
+  const { user } = useAuth();
+
+  // console.log(user);
 
   const [isEditing, setIsEditing] = useState({
     email: false,
@@ -16,20 +20,20 @@ const UserProfile = ({ type }) => {
     phoneNumber: false,
   });
 
-  const date = new Date(globalUser.birthDate);
+  const date = new Date(user.birthDate);
   const day = date.getUTCDate();
   const month = date.getUTCMonth() + 1;
   const year = date.getUTCFullYear();
 
   const [formData, setFormData] = useState({
-    avatar: globalUser.avatar,
-    email: globalUser.email,
-    address: globalUser.address,
+    avatar: user.avatar,
+    email: user.email,
+    address: user.address,
     birthDate: `${day}/${month}/${year}`,
-    phoneNumber: globalUser.phoneNumber,
+    phoneNumber: user.phoneNumber,
   });
 
-  console.log(globalUser.adress);
+  // console.log(user.adress);
 
   const handleEditClick = (field) => {
     setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -79,10 +83,10 @@ const UserProfile = ({ type }) => {
               </div>
               <div className="avatar">
                 <div className="w-16 self-center rounded-full md:w-32">
-                  {globalUser?.avatar ? (
-                    <img src={`${globalUser?.avatar}`} alt="Image de profil" />
+                  {user?.avatar ? (
+                    <img src={`${user?.avatar}`} alt="Image de profil" />
                   ) : (
-                    <PiUserCircleDuotone className="text-9xl" />
+                    <PiUserCircleDuotone className="text-[64px] md:text-9xl" />
                   )}
                 </div>
               </div>
@@ -96,7 +100,7 @@ const UserProfile = ({ type }) => {
               ) : (
                 ""
               )}
-              <span className="self-end text-base md:text-2xl">{`${globalUser.lastName} ${globalUser.firstName}`}</span>
+              <span className="self-end text-base md:text-2xl">{`${user.lastName} ${user.firstName}`}</span>
             </div>
           </div>
           <dl className="m-auto flex flex-col gap-3 md:w-5/6">

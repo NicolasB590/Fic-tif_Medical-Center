@@ -9,11 +9,11 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import Login from "./pages/Login.jsx";
-import { action as loginAction } from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import { action as registerAction } from "./pages/Register.jsx";
-import { loader as sharedLayoutLoader } from "./layouts/SharedLayout.jsx";
 import Profile from "./pages/Profile.jsx";
+
+import { AuthProvider } from "./context/useAuth.jsx";
 
 export const ThemeContext = createContext(null);
 export const UserContext = createContext(null);
@@ -31,7 +31,6 @@ const initTheme = () => {
 
 const App = () => {
   const [theme, setTheme] = useState(() => initTheme());
-  const [globalUser, setGlobalUser] = useState(null);
 
   const toggleTheme = (theme) => {
     setTheme(theme);
@@ -44,7 +43,6 @@ const App = () => {
       path: "/",
       // errorElement: <ErrorPage />,
       element: <SharedLayout />,
-      loader: sharedLayoutLoader,
       children: [
         {
           index: true,
@@ -77,7 +75,6 @@ const App = () => {
       path: "login",
       // errorElement: <ErrorPage/>,
       element: <Login />,
-      action: loginAction,
     },
     {
       path: "register",
@@ -89,7 +86,7 @@ const App = () => {
 
   return (
     <main className="relative flex min-h-dvh flex-col items-center bg-base-300">
-      <UserContext.Provider value={{ globalUser, setGlobalUser }}>
+      <AuthProvider>
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
           <ToastContainer
             position="bottom-center"
@@ -106,7 +103,7 @@ const App = () => {
           />
           <RouterProvider router={router} />
         </ThemeContext.Provider>
-      </UserContext.Provider>
+      </AuthProvider>
     </main>
   );
 };

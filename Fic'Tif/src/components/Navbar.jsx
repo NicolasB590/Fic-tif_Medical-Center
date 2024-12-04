@@ -7,40 +7,18 @@ import {
   PiUserCircleCheckDuotone,
   PiUserCirclePlusDuotone,
 } from "react-icons/pi";
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { UserContext } from "../App.jsx";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../context/useAuth.jsx";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const [defaultAvatar, setDefaultAvatar] = useState(
     "/user-circle-duotone.svg",
   );
 
-  const navigate = useNavigate();
-  const { setGlobalUser } = useContext(UserContext);
+  const { user, logout } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await axios("/api/v1/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      setGlobalUser(null);
-    } catch (error) {
-      console.log(error);
-
-      toast.error(
-        error?.msg
-          ? error.msg
-          : "Une erreur est survenue lors de la déconnexion",
-      );
-    }
-
-    navigate("/");
-  };
+  // console.log(user);
 
   return (
     <div className="navbar justify-center bg-base-200">
@@ -121,7 +99,7 @@ const Navbar = ({ user }) => {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleLogout}>
+                    <button onClick={() => logout()}>
                       <PiDoorOpenDuotone />
                       Déconnexion
                     </button>

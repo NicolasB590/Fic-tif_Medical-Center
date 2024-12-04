@@ -36,6 +36,12 @@ const login = async (req, res) => {
 	const id = user._id;
 	const email = user.email;
 
+	const isPasswordCorrect = await user.comparePasswords(req.body.password);
+	if (!isPasswordCorrect) {
+		// Si le mot de passe est incorrect, lance une erreur d'authentification
+		throw new UnauthenticatedError("Identifiants invalides.");
+	}
+
 	const token = jwt.sign({ id, email }, process.env.JWT_SECRET, {
 		expiresIn: process.env.JWT_LIFETIME,
 	});

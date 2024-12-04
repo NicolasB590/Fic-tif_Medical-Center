@@ -1,62 +1,20 @@
-import axios from "axios";
-// import { useContext } from "react";
 import { PiHouseLineDuotone } from "react-icons/pi";
-import { Form, Link, redirect, useFetcher } from "react-router-dom";
-// import { UserContext } from "../App.jsx"
-import { toast } from "react-toastify";
-
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-
-  const email = formData.get("email");
-  const password = formData.get("password");
-
-  console.log(email);
-  console.log(password);
-
-  try {
-    await axios.post("/api/v1/auth/login", {
-      email,
-      password,
-    });
-
-    return redirect("/");
-  } catch (error) {
-    toast.error(
-      error.response?.data?.msg ||
-        "Erreur lors de la récupération de l'utilisateur",
-    );
-  }
-  return null;
-  // return redirect("/")
-};
+import { Form, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth.jsx";
 
 const Login = () => {
-  const fetcher = useFetcher();
-  // const fecthData = useActionData();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.target);
+    const formData = Object.fromEntries(data.entries());
 
-    fetcher.submit(data, {
-      method: "post",
-      action: "/login",
-    });
+    await login(formData.email, formData.password);
 
-    // const fecthData = fetcher.data;
-
-    // console.log(fecthData);
-
-    // if (fetcher.data) {
-    //   if (fetcher.data.user) {
-    //     setGlobalUser(fetcher.data.user);
-    //   } else if (fetcher.data.error) {
-    //     toast.error("Erreur lors de la récupération de l'utilisateur");
-    //   }
-    // }
-    // console.log(fetcher.data);
+    navigate("/");
   };
 
   return (
