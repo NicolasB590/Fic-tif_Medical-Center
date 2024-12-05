@@ -28,7 +28,9 @@ const registerDoctor = async (req, res) => {
 };
 
 const login = async (req, res) => {
+	console.log(req.body);
 	const user = await usersService.get({ email: req.body.email });
+
 	if (!user) {
 		throw new UnauthenticatedError("Identifiants invalides.");
 	}
