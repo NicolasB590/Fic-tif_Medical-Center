@@ -19,14 +19,11 @@ export const action = async ({ request }) => {
   }
 
   try {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/v1/appointments",
-      {
-        date: reservedDate,
-        doctorId: doctor,
-        patientId: "6707d96b65816cd4c6b4dd38",
-      },
-    );
+    const { data } = await axios.post("/api/v1/appointments", {
+      date: reservedDate,
+      doctorId: doctor,
+      patientId: "6707d96b65816cd4c6b4dd38",
+    });
 
     toast.success(data.msg);
 
@@ -57,9 +54,7 @@ const Appointment = () => {
 
   const getAllSpecialities = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/v1/doctors/specialities",
-      );
+      const { data } = await axios.get("/api/v1/doctors/specialities");
       setSpecialities(data.specialities);
     } catch (error) {
       console.log(error);
@@ -68,10 +63,9 @@ const Appointment = () => {
 
   const getDoctorsBySpeciality = async (speciality) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/v1/doctors/bySpeciality",
-        { speciality },
-      );
+      const { data } = await axios.post("/api/v1/doctors/bySpeciality", {
+        speciality,
+      });
       return data.doctors;
     } catch (error) {
       console.log(error);
@@ -113,10 +107,9 @@ const Appointment = () => {
 
   const getReservedSlots = async (doctorId) => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/v1/appointments/bydoctors",
-        { doctorId },
-      );
+      const { data } = await axios.post("/api/v1/appointments/bydoctors", {
+        doctorId,
+      });
       return data;
     } catch (error) {
       console.log(error);
@@ -178,10 +171,9 @@ const Appointment = () => {
     }
 
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/v1/doctors/options",
-        { params: { _id: updatedValues.doctor } },
-      );
+      const { data } = await axios.get("/api/v1/doctors/options", {
+        params: { _id: updatedValues.doctor },
+      });
 
       setCurrentDoctor(data.doctors);
     } catch (error) {

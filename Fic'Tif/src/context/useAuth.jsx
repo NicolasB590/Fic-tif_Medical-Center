@@ -16,15 +16,15 @@ export const AuthProvider = ({ children }) => {
       if (data) {
         console.log(data.user);
 
-        setUser(data.user);
+        // setUser(data.user);
         return data;
       } else {
-        setUser(null);
+        // setUser(null);
         return null;
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setUser(null);
+        // setUser(null);
         return null;
       }
       console.error(
@@ -36,10 +36,28 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    checkIfLoggedIn();
+    let isMounted = true; // Flag pour vérifier si le composant est monté
 
-    console.log("j'existe");
-  }, [isLogged]);
+    const loadUser = async () => {
+      const data = await checkIfLoggedIn();
+      if (isMounted) {
+        // Mettez à jour l'état seulement si le composant est monté
+        setUser(data?.user || null);
+      }
+    };
+
+    loadUser();
+
+    return () => {
+      isMounted = false; // Cleanup, met le flag à false quand le composant est démonté
+    };
+  }, [isLogged]); // Exécute à chaque fois que `isLogged` change
+
+  // useEffect(() => {
+  //   checkIfLoggedIn();
+
+  //   console.log("j'existe");
+  // }, [isLogged]);
 
   const login = async (email, password) => {
     try {

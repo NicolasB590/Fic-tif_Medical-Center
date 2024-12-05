@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuth.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import PatientAgenda from "../components/PatientAgenda.jsx";
@@ -9,13 +9,14 @@ import UserProfile from "../components/UserProfile.jsx";
 const Profile = () => {
   const { user, checkIfLoggedIn } = useAuth();
   // const [checker, setChecker] = useState(null);
-  // console.log(JSON.stringify(user, null, 2));
+  console.log(JSON.stringify(user, null, 2));
+  const [isLoading, setIsLoading] = useState(true);
 
   if (user === null) {
     checkIfLoggedIn();
   }
 
-  console.log(user);
+  // console.log(user);
 
   const navigate = useNavigate();
   let { state } = useLocation();
@@ -23,13 +24,19 @@ const Profile = () => {
   const initialTab = state ? state.tab : 1;
 
   useEffect(() => {
-    if (!user) {
+    if (!JSON.stringify(user, null, 2)) {
       console.log("coin");
 
       // checkIfLoggedIn();
       navigate("/");
+    } else {
+      setIsLoading(false);
     }
   }, [user, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div

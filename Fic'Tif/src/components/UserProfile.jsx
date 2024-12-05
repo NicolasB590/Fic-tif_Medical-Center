@@ -6,6 +6,7 @@ import {
   PiStethoscopeDuotone,
   PiUserCircleDuotone,
 } from "react-icons/pi";
+import axios from "axios";
 
 const UserProfile = ({ type }) => {
   // const { globalUser } = useContext(UserContext);
@@ -33,7 +34,7 @@ const UserProfile = ({ type }) => {
     phoneNumber: user.phoneNumber,
   });
 
-  // console.log(user.adress);
+  console.log(user._id);
 
   const handleEditClick = (field) => {
     setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -44,9 +45,14 @@ const UserProfile = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = (field) => {
-    // Ici, tu pourrais appeler une fonction pour mettre à jour les données sur le backend
+  const handleSave = async (field) => {
     console.log(`Updating ${field}:`, formData[field]);
+
+    try {
+      await axios.put(`/api/v1/users/${user._id}/`, formData[field]);
+    } catch (error) {
+      console.log(error);
+    }
 
     setIsEditing((prev) => ({ ...prev, [field]: false }));
   };
@@ -111,9 +117,11 @@ const UserProfile = ({ type }) => {
                   key={index}
                 >
                   {field === "birthDate" ? (
-                    <dt className="font-bold">{"Date de naissance : "}</dt>
+                    <dt className="self-center font-bold">
+                      {"Date de naissance : "}
+                    </dt>
                   ) : (
-                    <dt className="font-bold">
+                    <dt className="self-center font-bold">
                       {field.charAt(0).toUpperCase() + field.slice(1) + ` : `}
                     </dt>
                   )}
