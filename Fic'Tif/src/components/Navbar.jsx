@@ -18,8 +18,6 @@ const Navbar = () => {
 
   const { user, logout } = useAuth();
 
-  // console.log(user);
-
   return (
     <div className="navbar justify-center bg-base-200">
       <div className="flex w-full flex-row xl:max-w-screen-xl">

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../context/useAuth.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import PatientAgenda from "../components/PatientAgenda.jsx";
 import DoctorAgenda from "../components/DoctorAgenda.jsx";
 import Settings from "../components/Settings.jsx";
 import UserProfile from "../components/UserProfile.jsx";
+import Loading from "../components/Loading.jsx";
 
 const Profile = () => {
   const { user, checkIfLoggedIn } = useAuth();
   // const [checker, setChecker] = useState(null);
   console.log(JSON.stringify(user, null, 2));
-  const [isLoading, setIsLoading] = useState(true);
 
   if (user === null) {
     checkIfLoggedIn();
@@ -24,19 +24,13 @@ const Profile = () => {
   const initialTab = state ? state.tab : 1;
 
   useEffect(() => {
-    if (!JSON.stringify(user, null, 2)) {
+    if (!user) {
       console.log("coin");
 
       // checkIfLoggedIn();
       navigate("/");
-    } else {
-      setIsLoading(false);
     }
   }, [user, navigate]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div
@@ -55,7 +49,7 @@ const Profile = () => {
         role="tabpanel"
         className="tab-content h-full rounded-box border-base-300 bg-base-100 p-6"
       >
-        <UserProfile type={user.role} />
+        {user !== null ? <UserProfile type={user.role} /> : <Loading />}
       </div>
 
       <input
@@ -85,7 +79,15 @@ const Profile = () => {
         role="tabpanel"
         className="tab-content h-full rounded-box border-base-300 bg-base-100 p-6"
       >
-        {user.role === "patient" ? <PatientAgenda /> : <DoctorAgenda />}
+        {user !== null ? (
+          user.role === "patient" ? (
+            <PatientAgenda />
+          ) : (
+            <DoctorAgenda />
+          )
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   );
