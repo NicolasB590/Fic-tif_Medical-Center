@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import { UserContext } from "../App.jsx";
 import { useAuth } from "../context/useAuth.jsx";
 import {
   PiNotePencilDuotone,
@@ -7,12 +6,20 @@ import {
   PiUserCircleDuotone,
 } from "react-icons/pi";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UserProfile = ({ type }) => {
-  // const { globalUser } = useContext(UserContext);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // console.log(user);
+  const formatDate = (date) => {
+    if (!date) return "";
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const [isEditing, setIsEditing] = useState({
     email: false,
@@ -21,16 +28,11 @@ const UserProfile = ({ type }) => {
     phoneNumber: false,
   });
 
-  const date = new Date(user.birthDate);
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
-
   const [formData, setFormData] = useState({
     avatar: user.avatar,
     email: user.email,
     address: user.address,
-    birthDate: `${day}/${month}/${year}`,
+    birthDate: formatDate(new Date(user.birthDate)),
     phoneNumber: user.phoneNumber,
   });
 
@@ -40,18 +42,34 @@ const UserProfile = ({ type }) => {
     setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: name === "birthDate" ? formatDate(value) : value,
+  //   }));
+  // };
 
   const handleSave = async (field) => {
     console.log(`Updating ${field}:`, formData[field]);
 
     try {
-      await axios.put(`/api/v1/users/${user._id}/`, formData[field]);
+      await axios.put(`/api/v1/users`, { [field]: formData[field] });
     } catch (error) {
       console.log(error);
+    }
+
+    if (field === "email") {
+      toast.info(
+        "Modification des informations de connexion, veuillez vous reconnecter",
+      );
+
+      logout();
+
+      navigate("/login");
+    } else {
+      window.location.reload();
     }
 
     setIsEditing((prev) => ({ ...prev, [field]: false }));
@@ -130,8 +148,8 @@ const UserProfile = ({ type }) => {
                       <input
                         type={field === "birthDate" ? "date" : "text"}
                         name={field}
-                        value={formData[field]}
-                        onChange={handleChange}
+                        // value={formData[field]}
+                        // onChange={handleChange}
                         className="input input-bordered max-w-36 md:max-w-full"
                       />
                       <button

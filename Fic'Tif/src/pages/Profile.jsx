@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useAuth } from "../context/useAuth.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import PatientAgenda from "../components/PatientAgenda.jsx";
 import DoctorAgenda from "../components/DoctorAgenda.jsx";
 import Settings from "../components/Settings.jsx";
@@ -9,28 +8,15 @@ import Loading from "../components/Loading.jsx";
 
 const Profile = () => {
   const { user, checkIfLoggedIn } = useAuth();
-  // const [checker, setChecker] = useState(null);
   console.log(JSON.stringify(user, null, 2));
 
   if (user === null) {
     checkIfLoggedIn();
   }
 
-  // console.log(user);
-
-  const navigate = useNavigate();
   let { state } = useLocation();
 
   const initialTab = state ? state.tab : 1;
-
-  useEffect(() => {
-    if (!user) {
-      console.log("coin");
-
-      // checkIfLoggedIn();
-      navigate("/");
-    }
-  }, [user, navigate]);
 
   return (
     <div

@@ -35,9 +35,9 @@ const getAllByOptions = async (req, res) => {
 
 // Met à jour un utilisateur
 const update = async (req, res) => {
-	const id = req.params;
+	const id = req.user.id;
 
-	const updatedUser = await usersService.update(id.id, req.body);
+	const updatedUser = await usersService.update(id, req.body);
 	if (!updatedUser) {
 		return res
 			.status(StatusCodes.NOT_FOUND)

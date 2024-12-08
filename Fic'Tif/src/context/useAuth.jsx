@@ -85,6 +85,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       setUser(null);
+      setIsLogged(false);
 
       toast.success("Vous êtes maintenant déconnecté");
     } catch (error) {
