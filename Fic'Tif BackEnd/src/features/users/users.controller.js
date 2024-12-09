@@ -37,6 +37,9 @@ const getAllByOptions = async (req, res) => {
 const update = async (req, res) => {
 	const id = req.user.id;
 
+	console.log(req.user.id);
+	console.log(req.body);
+
 	const updatedUser = await usersService.update(id, req.body);
 	if (!updatedUser) {
 		return res
@@ -61,16 +64,16 @@ const update = async (req, res) => {
 
 // Supprime un utilisateur
 const remove = async (req, res) => {
-	const id = req.params;
-	const deletedUser = await usersService.remove(id.id);
+	const id = req.user.id;
+	console.log(id);
+
+	const deletedUser = await usersService.remove(id);
 	if (!deletedUser) {
-		return res
-			.status(StatusCodes.NOT_FOUND)
-			.json({ msg: "Utilisateur non trouvé" });
+		return res.status(StatusCodes.NOT_FOUND).json({ msg: "Compte non trouvé" });
 	}
 	res
 		.status(StatusCodes.OK)
-		.json({ deletedUser, msg: "Utilisateur supprimé avec succès" });
+		.json({ deletedUser, msg: "Compte supprimé avec succès" });
 };
 
 export { get, update, remove, getAllByOptions };

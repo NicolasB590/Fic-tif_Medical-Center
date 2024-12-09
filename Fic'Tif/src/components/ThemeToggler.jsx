@@ -9,10 +9,7 @@ const ThemeToggler = ({ location }) => {
       ? "form-control hidden mx-auto lg:flex lg:w-fit self-center"
       : "form-control lg:hidden w-fit ml-4";
 
-  const svgClasses =
-    location === "main"
-      ? "h-10 w-10 text-primary transition-all duration-500 hover:text-secondary"
-      : "h-7 w-7 text-primary transition-all duration-500 hover:text-secondary";
+  const svgClasses = location === "main" ? "h-10 w-10" : "h-7 w-7";
 
   return (
     <div className={locationClasses}>
@@ -20,6 +17,7 @@ const ThemeToggler = ({ location }) => {
         {/* this hidden checkbox controls the state */}
         <input
           type="checkbox"
+          // className="text-primary transition-all duration-500 hover:text-secondary"
           onChange={() => {
             if (theme === "cupcake") {
               toggleTheme("dim");

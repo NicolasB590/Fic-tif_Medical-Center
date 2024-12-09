@@ -14,17 +14,12 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.get("/api/v1/auth/isLogged");
 
       if (data) {
-        console.log(data.user);
-
-        // setUser(data.user);
         return data;
       } else {
-        // setUser(null);
         return null;
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        // setUser(null);
         return null;
       }
       console.error(
@@ -36,12 +31,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    let isMounted = true; // Flag pour vérifier si le composant est monté
+    let isMounted = true;
 
     const loadUser = async () => {
       const data = await checkIfLoggedIn();
       if (isMounted) {
-        // Mettez à jour l'état seulement si le composant est monté
         setUser(data?.user || null);
       }
     };
@@ -49,15 +43,9 @@ export const AuthProvider = ({ children }) => {
     loadUser();
 
     return () => {
-      isMounted = false; // Cleanup, met le flag à false quand le composant est démonté
+      isMounted = false;
     };
-  }, [isLogged]); // Exécute à chaque fois que `isLogged` change
-
-  // useEffect(() => {
-  //   checkIfLoggedIn();
-
-  //   console.log("j'existe");
-  // }, [isLogged]);
+  }, [isLogged]);
 
   const login = async (email, password) => {
     try {
@@ -67,13 +55,18 @@ export const AuthProvider = ({ children }) => {
       });
 
       setIsLogged(true);
-      // if (response) {
-      //   const user = await axios.get("api/v1/users",
-      // }
-
-      // checkIfLoggedIn();
     } catch (error) {
-      console.error("Erreur de connexion", error);
+      if (error.response) {
+        if (error.response.status === 401) {
+          toast.error("Identifiants incorrects. Veuillez réessayer.");
+        } else {
+          toast.error(
+            error.response.data.message || "Une erreur est survenue.",
+          );
+        }
+      } else {
+        toast.error("Erreur de connexion. Vérifiez votre connexion réseau.");
+      }
     }
   };
 

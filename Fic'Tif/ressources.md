@@ -1,6 +1,6 @@
 Librairies, scripts et plugins utilisés :
 
-- Tailwind --Installed --Fonctionnal
-- DaisyUI --Installed --Fonctionnal
-- axios --Installed
-- react router --Installed
+- Tailwind --Installed --Functionnal
+- DaisyUI --Installed --Functionnal
+- axios --Installed --Functionnal
+- react router --Installed --Functionnal

@@ -11,6 +11,6 @@ import authenticateUser from "../../middlewares/auth.middleware.js";
 router.get("/", usersController.getAllByOptions);
 router.get("/:id", usersController.get);
 router.put("/", authenticateUser, usersController.update);
-router.delete("/:id", authenticateUser, usersController.remove);
+router.delete("/", authenticateUser, usersController.remove);
 
 export default router;

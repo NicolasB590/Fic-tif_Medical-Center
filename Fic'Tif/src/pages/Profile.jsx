@@ -8,7 +8,7 @@ import Loading from "../components/Loading.jsx";
 
 const Profile = () => {
   const { user, checkIfLoggedIn } = useAuth();
-  console.log(JSON.stringify(user, null, 2));
+  // console.log(JSON.stringify(user, null, 2));
 
   if (user === null) {
     checkIfLoggedIn();
