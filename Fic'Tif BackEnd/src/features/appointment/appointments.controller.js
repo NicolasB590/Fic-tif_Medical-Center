@@ -83,13 +83,13 @@ const remove = async (req, res) => {
 		.json({ deletedAppointment, msg: "Rendez-vous supprimé avec succès" });
 };
 
-// Récupère la liste des rendez-vous assignés à un médecin
-const getAllByDoctorId = async (req, res) => {
-	console.log(req.body.doctorId);
+// Récupère la liste des rendez-vous assignés à un utilisateur
+const getAllById = async (req, res) => {
+	console.log(req.body.id);
 
-	const doctorId = req.body.doctorId;
+	const id = req.body.doctorId;
 
-	const appointments = await appointmentService.getAllByDoctorId(doctorId);
+	const appointments = await appointmentService.getAllById(id);
 
 	if (!appointments) {
 		return res
@@ -99,4 +99,4 @@ const getAllByDoctorId = async (req, res) => {
 	res.status(StatusCodes.OK).json({ appointments });
 };
 
-export { get, getAll, update, remove, register, getAllByDoctorId };
+export { get, getAll, update, remove, register, getAllById };

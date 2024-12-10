@@ -6,7 +6,7 @@ import { useFetcher, redirect } from "react-router-dom";
 
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
-import generateReservationSlots from "../utils/generateReservationSlots.js";
+import generateReservationSlots from "../utils/functions/generateReservationSlots.js";
 import { toast } from "react-toastify";
 
 export const action = async ({ request }) => {
@@ -107,7 +107,7 @@ const Appointment = () => {
 
   const getReservedSlots = async (doctorId) => {
     try {
-      const { data } = await axios.post("/api/v1/appointments/bydoctors", {
+      const { data } = await axios.post("/api/v1/appointments/user", {
         doctorId,
       });
       return data;

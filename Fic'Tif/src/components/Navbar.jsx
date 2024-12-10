@@ -7,16 +7,22 @@ import {
   PiUserCircleCheckDuotone,
   PiUserCirclePlusDuotone,
 } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/useAuth.jsx";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [defaultAvatar, setDefaultAvatar] = useState(
     "/user-circle-duotone.svg",
   );
 
   const { user, logout } = useAuth();
+
+  const logoutHandler = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div className="navbar justify-center bg-base-200">
@@ -97,7 +103,7 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={() => logout()}>
+                    <button onClick={() => logoutHandler()}>
                       <PiDoorOpenDuotone />
                       Déconnexion
                     </button>

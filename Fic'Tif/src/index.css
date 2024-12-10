@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scrollbar-width: thin;
+}
+
 .menu li > *:not(ul, .menu-title, details, .btn).active {
   @apply text-primary;
   @apply font-semibold;

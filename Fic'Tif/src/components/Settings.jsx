@@ -67,7 +67,7 @@ const Settings = () => {
         </button>
       </div>
 
-      <hr />
+      <div className="divider" />
 
       <div className="m-auto mt-4 flex w-fit flex-col items-center justify-center gap-4">
         <p className="text-center">
