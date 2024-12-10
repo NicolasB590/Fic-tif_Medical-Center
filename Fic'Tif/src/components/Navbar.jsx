@@ -27,14 +27,14 @@ const Navbar = () => {
   return (
     <div className="navbar justify-center bg-base-200">
       <div className="flex w-full flex-row xl:max-w-screen-xl">
-        <div className="flex-1">
+        <h1 className="flex-1">
           <Link
             to="/"
             className="btn btn-ghost text-3xl text-primary hover:text-secondary"
           >
             {"Fic'Tif"}
           </Link>
-        </div>
+        </h1>
         <div className="flex gap-2">
           <div className="form-control">
             <input

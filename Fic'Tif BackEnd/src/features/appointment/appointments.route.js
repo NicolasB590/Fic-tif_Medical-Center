@@ -14,5 +14,6 @@ router.get("/", appointmentController.get);
 router.put("/:id", appointmentController.update);
 router.delete("/:id", appointmentController.remove);
 router.post("/user", authenticateUser, appointmentController.getAllById);
+router.post("/doctors", appointmentController.getAllByDoctorId);
 
 export default router;

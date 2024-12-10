@@ -1,5 +1,6 @@
 import { PiDiamondDuotone } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/useAuth.jsx";
 
 const NavLinkClassSettings =
   "hover:bg-base-200 hover:font-semibold hover:text-secondary active:bg-base-300 active:font-semibold";
@@ -7,6 +8,7 @@ const SummaryClassSettings =
   "hover:bg-base-200 font-bold hover:text-secondary active:bg-base-300 active:font-semibold";
 
 const SideMenu = () => {
+  const { user } = useAuth();
   return (
     <ul className="menu h-full w-56 bg-base-100 text-primary">
       <li>
@@ -14,14 +16,23 @@ const SideMenu = () => {
           Accueil
         </NavLink>
       </li>
-      <li>
-        <NavLink to="/appointment" className={NavLinkClassSettings}>
-          Prendre rendez-vous
-          <span className="animate-bounce font-semibold text-secondary">
-            !!
-          </span>
-        </NavLink>
-      </li>
+      {user ? (
+        user.role === "patient" ? (
+          <li>
+            <NavLink to="/appointment" className={NavLinkClassSettings}>
+              Prendre rendez-vous
+              <span className="animate-bounce font-semibold text-secondary">
+                !!
+              </span>
+            </NavLink>
+          </li>
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
+
       <li>
         <details open>
           <summary className={SummaryClassSettings}>

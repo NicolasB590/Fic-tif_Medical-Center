@@ -26,4 +26,8 @@ const getAllById = (id) => {
 	return Appointment.find({ id });
 };
 
-export { get, create, update, remove, getAllById };
+const getAllByDoctorId = (doctorId) => {
+	return Appointment.find({ doctorId });
+};
+
+export { get, create, update, remove, getAllById, getAllByDoctorId };

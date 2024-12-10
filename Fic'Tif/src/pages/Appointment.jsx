@@ -2,12 +2,13 @@
 import moment from "moment-timezone";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useFetcher, redirect } from "react-router-dom";
+import { useFetcher, redirect, useNavigate } from "react-router-dom";
 
 import MyCalendar from "../components/BigCalendar.jsx";
 import WeekdaysView from "../utils/CustomCalendarView.jsx";
 import generateReservationSlots from "../utils/functions/generateReservationSlots.js";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/useAuth.jsx";
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -51,6 +52,10 @@ const Appointment = () => {
   const formRef = useRef();
   const fetcher = useFetcher();
   const allSlots = generateReservationSlots();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  console.log(user);
 
   const getAllSpecialities = async () => {
     try {
@@ -107,7 +112,7 @@ const Appointment = () => {
 
   const getReservedSlots = async (doctorId) => {
     try {
-      const { data } = await axios.post("/api/v1/appointments/user", {
+      const { data } = await axios.post("/api/v1/appointments/doctors", {
         doctorId,
       });
       return data;
@@ -180,6 +185,14 @@ const Appointment = () => {
       console.log(error);
     }
   };
+
+  if (user) {
+    console.log(user.log);
+
+    if (user.role === "doctor") {
+      navigate("/");
+    }
+  }
 
   useEffect(() => {
     getAllSpecialities();
@@ -271,16 +284,25 @@ const Appointment = () => {
             <h3 className="text-lg font-bold">Confirmation de rendez-vous :</h3>
             {currentDoctor && currentDoctor.length > 0 && (
               <div>
-                <h4>
-                  {`Dr. ${currentDoctor[0].user.lastName} ${currentDoctor[0].user.firstName}`}
-                </h4>
-                <h5>{`Spécialité : ${currentDoctor[0].speciality}`}</h5>
+                <p>
+                  {`Avec le Dr. ${currentDoctor[0].user.lastName} ${currentDoctor[0].user.firstName}`}
+                </p>
+                <p>{`Spécialité : ${currentDoctor[0].speciality}`}</p>
                 <p>{`Numéro de téléphone : ${currentDoctor[0].user.phoneNumber}`}</p>
                 <p>{`Email : ${currentDoctor[0].user.email}`}</p>
               </div>
             )}
-            <p className="py-4">Informations du Patient</p>
-            <p className="py-4">
+            {user ? (
+              <div className="py-4">
+                <p>{`Pour ${user.gender === "woman" ? "la" : "le"} patient${user.gender === "woman" ? "e" : ""} ${user.lastName} ${user.firstName}`}</p>
+                <p>{`Numéro de téléphone : ${user.phoneNumber}`}</p>
+                <p>{`Email : ${user.email}`}</p>
+              </div>
+            ) : (
+              ""
+            )}
+
+            <p className="pb-4">
               {appointmentValues.reservedDate
                 ? `Date du Rendez-vous : ${moment(
                     appointmentValues.reservedDate,

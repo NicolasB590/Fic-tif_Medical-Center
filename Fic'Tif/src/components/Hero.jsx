@@ -1,4 +1,9 @@
+import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/useAuth.jsx";
+
 const Hero = () => {
+  const { user } = useAuth();
+
   return (
     <div
       className="hero flex-1 rounded-box"
@@ -10,13 +15,42 @@ const Hero = () => {
       <div className="hero-overlay bg-base-100 bg-opacity-80"></div>
       <div className="hero-content text-center text-neutral-content">
         <div className="max-w-md">
-          <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
-          <p className="mb-5 font-semibold">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
-          </p>
-          <button className="btn btn-primary">Get Started</button>
+          {user ? (
+            <>
+              <h2 className="mb-5 text-5xl font-bold">{`Bonjour ${user.firstName}`}</h2>
+              <p className="mb-5 font-semibold">
+                Un besoin médical ? Prenez rendez-vous dès aujourd&apos;hui pour
+                bénéficier des soins adaptés à vos besoins.
+              </p>
+              <NavLink to="/appointment">
+                <button className="btn btn-primary transition-all duration-500 hover:btn-secondary">
+                  Prendre rendez-vous
+                </button>
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <h2 className="mb-5 text-5xl font-bold">{`Bonjour`}</h2>
+              <p className="mb-5 font-semibold">
+                Que ce soit pour un petit bobo, une consultation de routine, ou
+                pour un suivi médical important, notre équipe de professionnels
+                est là pour vous accompagner. Si vous ou l&apos;un de vos
+                proches traversez un moment difficile, n&apos;attendez pas :
+                nous sommes prêts à vous recevoir rapidement dans un
+                environnement chaleureux et rassurant. Faites le premier pas
+                vers un mieux-être, inscivez vous dès aujourd&apos;hui pour
+                prendre rendez-vous avec l&apos;un de nos spécialistes.
+              </p>
+              <NavLink to="/register">
+                <button className="btn btn-primary transition-all duration-500 hover:btn-secondary">
+                  Inscrivez-vous
+                  <span className="animate-bounce font-bold text-secondary">
+                    !!
+                  </span>
+                </button>
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </div>

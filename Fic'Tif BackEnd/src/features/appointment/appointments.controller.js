@@ -85,10 +85,7 @@ const remove = async (req, res) => {
 
 // Récupère la liste des rendez-vous assignés à un utilisateur
 const getAllById = async (req, res) => {
-	console.log(req.body.id);
-
 	const id = req.body.doctorId;
-
 	const appointments = await appointmentService.getAllById(id);
 
 	if (!appointments) {
@@ -99,4 +96,20 @@ const getAllById = async (req, res) => {
 	res.status(StatusCodes.OK).json({ appointments });
 };
 
-export { get, getAll, update, remove, register, getAllById };
+// Récupère la liste des rendez-vous assignés à un médecin
+const getAllByDoctorId = async (req, res) => {
+	console.log(req.body.doctorId);
+
+	const doctorId = req.body.doctorId;
+
+	const appointments = await appointmentService.getAllByDoctorId(doctorId);
+
+	if (!appointments) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Aucun rendez-vous n'a été trouvé" });
+	}
+	res.status(StatusCodes.OK).json({ appointments });
+};
+
+export { get, getAll, update, remove, register, getAllById, getAllByDoctorId };

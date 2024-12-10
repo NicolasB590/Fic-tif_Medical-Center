@@ -102,10 +102,6 @@ const DoctorAgenda = () => {
   // Obtenir les rendez-vous de la semaine actuelle
   const currentWeekAppointments = weeklyAppointments[currentWeekIndex] || [];
 
-  // Calcul des dates de début et de fin de la semaine
-  const startOfCurrentWeek = startOfWeek(new Date(), { weekStartsOn: 1 }); // Commence la semaine le lundi
-  const endOfCurrentWeek = addDays(startOfCurrentWeek, 6); // La fin de la semaine est 6 jours après le début
-
   return (
     <div>
       <h2 className="mb-4 text-center text-3xl font-semibold text-primary">
