@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/useAuth.jsx";
+import SearchDoctors from "./SearchDoctors.jsx";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -24,6 +25,13 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [isFocused, setIsFocused] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(searchTerm);
+  // }, [searchTerm]);
+
   return (
     <div className="navbar justify-center bg-base-200">
       <div className="flex w-full flex-row xl:max-w-screen-xl">
@@ -35,14 +43,8 @@ const Navbar = () => {
             {"Fic'Tif"}
           </Link>
         </h1>
-        <div className="flex gap-2">
-          <div className="form-control">
-            <input
-              type="text"
-              placeholder="Search"
-              className="input input-bordered w-24 md:w-auto"
-            />
-          </div>
+        <div className="relative flex gap-2">
+          <SearchDoctors />
           <ThemeToggler location="main" />
 
           <div className="dropdown dropdown-end">

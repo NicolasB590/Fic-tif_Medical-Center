@@ -13,7 +13,7 @@ const Hero = () => {
       }}
     >
       <div className="hero-overlay bg-base-100 bg-opacity-80"></div>
-      <div className="hero-content text-center text-neutral-content">
+      <div className="hero-content text-center text-base-content">
         <div className="max-w-md">
           {user ? (
             <>
@@ -23,7 +23,7 @@ const Hero = () => {
                 bénéficier des soins adaptés à vos besoins.
               </p>
               <NavLink to="/appointment">
-                <button className="btn btn-primary transition-all duration-500 hover:btn-secondary">
+                <button className="btn btn-primary text-base-100 transition-all duration-500 hover:btn-secondary">
                   Prendre rendez-vous
                 </button>
               </NavLink>
@@ -41,14 +41,19 @@ const Hero = () => {
                 vers un mieux-être, inscivez vous dès aujourd&apos;hui pour
                 prendre rendez-vous avec l&apos;un de nos spécialistes.
               </p>
-              <NavLink to="/register">
-                <button className="btn btn-primary transition-all duration-500 hover:btn-secondary">
-                  Inscrivez-vous
-                  <span className="animate-bounce font-bold text-secondary">
-                    !!
-                  </span>
-                </button>
-              </NavLink>
+              <div className="flex flex-row justify-center gap-4">
+                <NavLink to="/register">
+                  <button className="btn btn-primary text-base-100 transition-all duration-500 hover:btn-secondary">
+                    Inscription
+                    <span className="animate-bounce font-bold">!!</span>
+                  </button>
+                </NavLink>
+                <NavLink to="/login">
+                  <button className="btn btn-primary text-base-100 transition-all duration-500 hover:btn-secondary">
+                    Connection
+                  </button>
+                </NavLink>
+              </div>
             </>
           )}
         </div>

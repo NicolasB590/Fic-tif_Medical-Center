@@ -1,0 +1,185 @@
+// server.js (ou un fichier de route spécifique)
+const express = require('express');
+const mongoose = require('mongoose');
+const Doctor = require('./models/Doctor');  // Modèle de ton médecin
+const app = express();
+const port = 5000;
+
+// Middleware pour parser le corps des requêtes JSON
+app.use(express.json());
+
+// Connexion à MongoDB
+mongoose.connect('mongodb://localhost/medicodb', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connecté"))
+  .catch(err => console.error("Erreur de connexion à MongoDB: ", err));
+
+// Endpoint de recherche
+app.get('/api/search/doctors', async (req, res) => {
+  const { searchTerm } = req.query;  // Récupérer searchTerm depuis la query string
+
+  if (!searchTerm) {
+    return res.status(400).json({ error: "Le terme de recherche est requis" });
+  }
+
+  try {
+    // Recherche avec une expression régulière pour un match partiel sur firstName ou lastName
+    const doctors = await Doctor.find({
+      $or: [
+        { firstName: { $regex: searchTerm, $options: 'i' } },  // i pour insensible à la casse
+        { lastName: { $regex: searchTerm, $options: 'i' } }
+      ]
+    });
+
+    res.json(doctors);  // Retourner les médecins trouvés
+  } catch (err) {
+    console.error("Erreur de recherche de médecins:", err);
+    res.status(500).json({ error: "Erreur du serveur" });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Serveur démarré sur http://localhost:${port}`);
+});
+
+
+---------------------------------------------------------
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const SearchDoctors = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [doctors, setDoctors] = useState([]);
+  const [isFocused, setIsFocused] = useState(false); // Pour gérer le focus
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Si searchTerm est vide ou que l'utilisateur a perdu le focus, on ne fait pas la requête
+    if (searchTerm === '') {
+      setDoctors([]);  // Efface les résultats quand il n'y a pas de recherche
+      return;
+    }
+
+    const fetchDoctors = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`/api/search/doctors?searchTerm=${searchTerm}`);
+        setDoctors(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la recherche des médecins", error);
+      }
+      setLoading(false);
+    };
+
+    fetchDoctors();
+  }, [searchTerm]);  // La recherche se déclenche à chaque modification de searchTerm
+
+  return (
+    <div className="relative">
+      <input
+        type="search"
+        placeholder="Search"
+        className="input input-bordered w-24 md:w-auto"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
+
+      {/* Affichage des résultats sous l'input si searchTerm n'est pas vide et l'input est focus */}
+      {(isFocused && searchTerm && doctors.length > 0) && (
+        <div className="absolute top-full left-0 w-full bg-white p-2 shadow-lg mt-1">
+          {loading ? (
+            <p>Chargement...</p>
+          ) : (
+            doctors.map((doctor) => (
+              <div key={doctor._id} className="p-2 border-b">
+                {`Dr. ${doctor.firstName} ${doctor.lastName}`}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SearchDoctors;
+
+-------------------------------------------
+
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { debounce } from 'lodash';  // Importer debounce depuis lodash
+
+const SearchDoctors = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [doctors, setDoctors] = useState([]);
+  const [isFocused, setIsFocused] = useState(false); // Pour gérer le focus
+  const [loading, setLoading] = useState(false);
+
+  // Utilisation de debounce pour limiter la fréquence des requêtes
+  const debouncedSearch = useCallback(
+    debounce(async (searchTerm) => {
+      if (!searchTerm) {
+        setDoctors([]); // Effacer les résultats si le champ est vide
+        return;
+      }
+
+      setLoading(true);  // Afficher l'indicateur de chargement
+      try {
+        const response = await axios.get(`/api/search/doctors?searchTerm=${searchTerm}`);
+        setDoctors(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la recherche des médecins", error);
+      } finally {
+        setLoading(false);  // Cacher l'indicateur de chargement
+      }
+    }, 300),  // Attendre 300ms après la dernière frappe avant de lancer la recherche
+    []
+  );
+
+  // Cette fonction est appelée à chaque changement du champ de recherche
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    debouncedSearch(searchTerm);  // Appeler la fonction debouncée à chaque changement de searchTerm
+    // Annuler le debounce au démontage pour éviter les fuites de mémoire
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [searchTerm, debouncedSearch]);  // Re-exécuter si searchTerm change
+
+  return (
+    <div className="relative">
+      <input
+        type="search"
+        placeholder="Search"
+        className="input input-bordered w-24 md:w-auto"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
+
+      {/* Affichage des résultats sous l'input si searchTerm n'est pas vide et l'input est focus */}
+      {(isFocused && searchTerm && doctors.length > 0) && (
+        <div className="absolute top-full left-0 w-full bg-white p-2 shadow-lg mt-1">
+          {loading ? (
+            <p>Chargement...</p>
+          ) : (
+            doctors.map((doctor) => (
+              <div key={doctor._id} className="p-2 border-b">
+                {`Dr. ${doctor.firstName} ${doctor.lastName}`}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SearchDoctors;
