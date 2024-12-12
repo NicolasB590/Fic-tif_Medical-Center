@@ -13,11 +13,10 @@ const ThemeToggler = ({ location }) => {
 
   return (
     <div className={locationClasses}>
-      <label className="swap swap-rotate">
+      <label className="swap swap-rotate text-primary transition-all duration-500 hover:text-secondary">
         {/* this hidden checkbox controls the state */}
         <input
           type="checkbox"
-          // className="text-primary transition-all duration-500 hover:text-secondary"
           onChange={() => {
             if (theme === "cupcake") {
               toggleTheme("dim");

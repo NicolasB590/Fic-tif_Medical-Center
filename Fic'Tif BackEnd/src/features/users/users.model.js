@@ -5,13 +5,13 @@ import jwt from "jsonwebtoken";
 const UserSchema = new Schema({
 	firstName: {
 		type: String,
-		required: [true, "Veuillez fournir un nom de famille"],
+		required: [true, "Veuillez fournir un prénom"],
 		maxlength: 50,
 		minlength: 3,
 	},
 	lastName: {
 		type: String,
-		required: [true, "Veuillez fournir un prénom"],
+		required: [true, "Veuillez fournir un nom de famille"],
 		maxlength: 50,
 		minlength: 3,
 	},
@@ -28,7 +28,7 @@ const UserSchema = new Schema({
 	email: {
 		type: String,
 		required: [true, "Veuillez fournir un email"],
-		unique: true,
+		unique: true, // Assurer l'unicité de l'email
 		match: [
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 			"Veuillez fournir un email valide",
@@ -57,37 +57,48 @@ const UserSchema = new Schema({
 	},
 	gender: {
 		type: String,
-		emun: ["man", "woman"],
+		enum: ["man", "woman"], // Correction ici : "enum" au lieu de "emun"
 		required: true,
+	},
+	doctor: {
+		type: Schema.Types.ObjectId,
+		ref: "Doctor", // On référence le modèle 'Doctor'
 	},
 });
 
+// Hachage du mot de passe avant la sauvegarde
 UserSchema.pre("save", async function () {
-	const salt = await bcrypt.genSalt();
-	this.password = await bcrypt.hash(this.password, salt);
+	if (this.isModified("password")) {
+		// On vérifie si le mot de passe a été modifié
+		const salt = await bcrypt.genSalt();
+		this.password = await bcrypt.hash(this.password, salt);
+	}
 });
 
+// Hachage du mot de passe avant la mise à jour
 UserSchema.pre("findOneAndUpdate", async function () {
-	console.log("coincoin");
-
 	if (this._update.password) {
+		// On vérifie si le mot de passe a été mis à jour
 		const salt = await bcrypt.genSalt();
 		this._update.password = await bcrypt.hash(this._update.password, salt);
 	}
 });
 
+// Méthode pour exclure le mot de passe lors de la conversion en JSON
 UserSchema.methods.toJSON = function () {
 	let userObject = this.toObject();
-	delete userObject.password;
+	delete userObject.password; // Exclure le mot de passe
 	return userObject;
 };
 
+// Méthode pour créer un token d'accès JWT
 UserSchema.methods.createAccessToken = function () {
 	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
 		expiresIn: process.env.JWT_LIFETIME,
 	});
 };
 
+// Méthode pour comparer les mots de passe
 UserSchema.methods.comparePasswords = async function (candidatePassword) {
 	const isMatch = await bcrypt.compare(candidatePassword, this.password);
 	return isMatch;

@@ -21,4 +21,29 @@ const getDoctorsBySpeciality = async (req, res) => {
 	res.status(StatusCodes.OK).json({ doctors });
 };
 
-export { getAllSpecialities, getAllByOptions, getDoctorsBySpeciality };
+const searchDoctors = async (req, res) => {
+	const searchTerm = req.body.searchTerm;
+
+	if (typeof searchTerm !== "string" || searchTerm.trim() === "") {
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ msg: "Le terme de recherche doit être une chaîne valide." });
+	}
+
+	const searchResult = await doctorService.searchDoctors(searchTerm);
+
+	if (!searchResult) {
+		res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Erreur lors de la recherche des médecins" });
+	}
+
+	res.status(StatusCodes.OK).json({ searchResult });
+};
+
+export {
+	getAllSpecialities,
+	getAllByOptions,
+	getDoctorsBySpeciality,
+	searchDoctors,
+};

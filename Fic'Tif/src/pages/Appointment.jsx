@@ -55,8 +55,6 @@ const Appointment = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  console.log(user);
-
   const getAllSpecialities = async () => {
     try {
       const { data } = await axios.get("/api/v1/doctors/specialities");
@@ -167,6 +165,7 @@ const Appointment = () => {
     const updatedValues = {
       doctor: appointmentValues.doctor,
       reservedDate: event.start,
+      patient: user._id,
     };
 
     setAppointmentValues(updatedValues);
@@ -187,7 +186,7 @@ const Appointment = () => {
   };
 
   if (user) {
-    console.log(user.log);
+    console.log(user._id);
 
     if (user.role === "doctor") {
       navigate("/");
