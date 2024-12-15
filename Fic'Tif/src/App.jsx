@@ -14,6 +14,7 @@ import { action as registerAction } from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 
 import { AuthProvider } from "./context/useAuth.jsx";
+import DoctorPage from "./pages/DoctorPage.jsx";
 
 export const ThemeContext = createContext(null);
 export const UserContext = createContext(null);
@@ -66,6 +67,12 @@ const App = () => {
         {
           path: "profile",
           element: <Profile />,
+          errorElement: <div>Error</div>,
+          // loader: cocktailsLoader,
+        },
+        {
+          path: "doctorPage",
+          element: <DoctorPage />,
           errorElement: <div>Error</div>,
           // loader: cocktailsLoader,
         },

@@ -2,6 +2,8 @@ import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { redirect } from "react-router-dom";
+import { createAvatar } from "@dicebear/avatars";
+import { thumbs } from "@dicebear/collection";
 
 const AuthContext = createContext();
 
@@ -13,11 +15,21 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/api/v1/auth/isLogged");
 
-      if (data) {
+      if (data?.user) {
+        if (!data.user.avatar) {
+          const seed = `${data.user.firstName}${data.user.lastName}`;
+          const avatarSvg = createAvatar(thumbs, {
+            seed,
+            backgroundColor: ["#ffffff"],
+            radius: 50,
+          });
+          data.user.avatar = avatarSvg;
+        }
+
         return data;
-      } else {
-        return null;
       }
+
+      return null;
     } catch (error) {
       if (error.response && error.response.status === 401) {
         return null;

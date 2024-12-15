@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
+import { Link } from "react-router-dom";
 
 const SearchDoctors = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,6 +39,13 @@ const SearchDoctors = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleBlur = (e) => {
+    // Vérifie si le focus est perdu, sauf si c'est un clic sur la liste
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsFocused(false);
+    }
+  };
+
   useEffect(() => {
     debouncedSearch(searchTerm); // Appeler la fonction debouncée à chaque changement de searchTerm
     // Annuler le debounce au démontage pour éviter les fuites de mémoire
@@ -47,7 +55,11 @@ const SearchDoctors = () => {
   }, [searchTerm, debouncedSearch]); // Re-exécuter si searchTerm change
 
   return (
-    <div className="invisible relative sm:visible">
+    <div
+      className="invisible relative sm:visible"
+      onBlur={handleBlur}
+      tabIndex={-1}
+    >
       <input
         type="search"
         placeholder="Recherchez un médecin..."
@@ -55,7 +67,7 @@ const SearchDoctors = () => {
         value={searchTerm}
         onChange={handleSearchChange}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        // onBlur={() => setIsFocused(false)}
       />
 
       {/* Affichage des résultats sous l'input si searchTerm n'est pas vide et l'input est focus */}
@@ -68,7 +80,21 @@ const SearchDoctors = () => {
           ) : (
             doctors.map((doctor) => (
               <li key={doctor._id}>
-                <button className="btn btn-ghost w-full">{`Dr. ${doctor.firstName} ${doctor.lastName}`}</button>
+                <Link
+                  to={{
+                    pathname: "/doctorPage/",
+                    search: `?id=${doctor._id}`,
+                  }}
+                >
+                  <button
+                    className="btn btn-ghost flex w-full flex-row justify-between"
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    <span>{`Dr. ${doctor.firstName} ${doctor.lastName}`}</span>
+                    <span>{`- ${doctor.speciality === null ? "Généraliste" : doctor.speciality}`}</span>
+                  </button>
+                </Link>
+
                 <div className="divider my-1" />
               </li>
             ))

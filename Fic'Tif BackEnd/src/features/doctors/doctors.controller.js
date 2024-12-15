@@ -9,7 +9,9 @@ const getAllSpecialities = async (_req, res) => {
 
 // Récupère une liste de médecins selon des critères, tous les médecins si aucun critère
 const getAllByOptions = async (req, res) => {
-	const doctors = await doctorService.getAllByOptions(req.query);
+	console.log(req.body);
+
+	const doctors = await doctorService.getAllByOptions(req.body);
 	res.status(StatusCodes.OK).json({ doctors });
 };
 
@@ -41,9 +43,15 @@ const searchDoctors = async (req, res) => {
 	res.status(StatusCodes.OK).json({ searchResult });
 };
 
+const getAllInformations = async (req, res) => {
+	const doctor = await doctorService.getAllInformations(req.body);
+	res.status(StatusCodes.OK).json({ doctor });
+};
+
 export {
 	getAllSpecialities,
 	getAllByOptions,
 	getDoctorsBySpeciality,
 	searchDoctors,
+	getAllInformations,
 };

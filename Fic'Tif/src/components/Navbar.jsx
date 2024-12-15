@@ -25,13 +25,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [isFocused, setIsFocused] = useState(false);
-
-  // useEffect(() => {
-  //   console.log(searchTerm);
-  // }, [searchTerm]);
-
   return (
     <div className="navbar justify-center bg-base-200">
       <div className="flex w-full flex-row xl:max-w-screen-xl">
@@ -71,9 +64,16 @@ const Navbar = () => {
                   }
                 >
                   {user?.avatar ? (
-                    <img src={`${user?.avatar}`} alt="Image de profil" />
+                    user.avatar.trim().startsWith("<svg") ? (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: user.avatar }}
+                        className="h-full w-full"
+                      />
+                    ) : (
+                      <img src={`${user.avatar}`} alt="Image de profil" />
+                    )
                   ) : (
-                    <img src={defaultAvatar} alt="Image de profil" />
+                    <PiUserCircleDuotone className="text-[64px] text-primary transition-all duration-500 hover:text-secondary md:text-[40px]" />
                   )}
                 </div>
               </div>

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 const UserProfile = ({ type }) => {
   const { user, logout } = useAuth();
+
   const navigate = useNavigate();
 
   const formatDate = (date) => {
@@ -111,7 +112,14 @@ const UserProfile = ({ type }) => {
             <div className="avatar">
               <div className="w-16 self-center rounded-full md:w-32">
                 {user?.avatar ? (
-                  <img src={`${user?.avatar}`} alt="Image de profil" />
+                  user.avatar.trim().startsWith("<svg") ? (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: user.avatar }}
+                      className="h-full w-full"
+                    />
+                  ) : (
+                    <img src={`${user.avatar}`} alt="Image de profil" />
+                  )
                 ) : (
                   <PiUserCircleDuotone className="text-[64px] md:text-9xl" />
                 )}
@@ -150,7 +158,6 @@ const UserProfile = ({ type }) => {
                   <div className="grid grid-cols-[1fr_6rem] gap-2">
                     <input
                       type={field === "birthDate" ? "date" : "text"}
-                      // name={field}
                       ref={
                         field === "email"
                           ? emailRef

@@ -1,8 +1,23 @@
 import Doctor from "./doctors.model.js";
 import User from "../users/users.model.js";
+import mongoose from "mongoose";
 
 const get = (id) => {
 	return Doctor.findById(id);
+};
+
+const getAllInformations = ({ params }) => {
+	// Récupérer l'id utilisateur depuis les paramètres
+	const userId = params._id;
+
+	console.log(userId);
+
+	return Doctor.findOne({ user: userId }) // Chercher dans le champ `user`
+		.select("-_id") // Exclure le champ `_id` du document principal
+		.populate({
+			path: "user", // Peupler les données de l'utilisateur
+			select: "-_id -birthDate -role", // Exclure certains champs du modèle user
+		});
 };
 
 const update = (userId, change) => {
@@ -33,20 +48,20 @@ const getAllByOptions = async (options) => {
 	let query = {};
 
 	if (options) {
-		if (options.speciality) {
+		if (options.speciality && typeof options.speciality === "string") {
 			query.speciality = options.speciality;
 		}
-		if (options._id) {
+		if (options._id && /^[a-fA-F0-9]{24}$/.test(options._id)) {
 			query._id = options._id;
 		}
-		if (options.user) {
+		if (options.user && /^[a-fA-F0-9]{24}$/.test(options.user)) {
 			query.user = options.user;
 		}
 	}
 
 	const doctors = await Doctor.find(query).select("-_id").populate({
 		path: "user",
-		select: "-_id -birthDate -adress -role",
+		select: "-_id -birthDate -role",
 	});
 
 	return doctors;
@@ -89,4 +104,5 @@ export {
 	getAllByOptions,
 	getDoctorsBySpeciality,
 	searchDoctors,
+	getAllInformations,
 };
