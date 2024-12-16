@@ -1,7 +1,7 @@
 import Patient from "./patients.model.js";
 
 const get = (id) => {
-	return Patient.findById(id);
+	return Patient.find({ user: id });
 };
 
 const create = (id) => {

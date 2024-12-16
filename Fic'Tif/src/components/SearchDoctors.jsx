@@ -6,18 +6,17 @@ import { Link } from "react-router-dom";
 const SearchDoctors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [doctors, setDoctors] = useState([]);
-  const [isFocused, setIsFocused] = useState(false); // Pour gérer le focus
+  const [isFocused, setIsFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Utilisation de debounce pour limiter la fréquence des requêtes
   const debouncedSearch = useCallback(
     debounce(async (searchTerm) => {
       if (!searchTerm) {
-        setDoctors([]); // Effacer les résultats si le champ est vide
+        setDoctors([]);
         return;
       }
 
-      setLoading(true); // Afficher l'indicateur de chargement
+      setLoading(true);
       try {
         const response = await axios.post(`/api/v1/doctors/search`, {
           searchTerm,
@@ -28,31 +27,28 @@ const SearchDoctors = () => {
       } catch (error) {
         console.error("Erreur lors de la recherche des médecins", error);
       } finally {
-        setLoading(false); // Cacher l'indicateur de chargement
+        setLoading(false);
       }
-    }, 300), // Attendre 300ms après la dernière frappe avant de lancer la recherche
+    }, 300),
     [],
   );
 
-  // Cette fonction est appelée à chaque changement du champ de recherche
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleBlur = (e) => {
-    // Vérifie si le focus est perdu, sauf si c'est un clic sur la liste
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsFocused(false);
     }
   };
 
   useEffect(() => {
-    debouncedSearch(searchTerm); // Appeler la fonction debouncée à chaque changement de searchTerm
-    // Annuler le debounce au démontage pour éviter les fuites de mémoire
+    debouncedSearch(searchTerm);
     return () => {
       debouncedSearch.cancel();
     };
-  }, [searchTerm, debouncedSearch]); // Re-exécuter si searchTerm change
+  }, [searchTerm, debouncedSearch]);
 
   return (
     <div
@@ -67,7 +63,6 @@ const SearchDoctors = () => {
         value={searchTerm}
         onChange={handleSearchChange}
         onFocus={() => setIsFocused(true)}
-        // onBlur={() => setIsFocused(false)}
       />
 
       {/* Affichage des résultats sous l'input si searchTerm n'est pas vide et l'input est focus */}

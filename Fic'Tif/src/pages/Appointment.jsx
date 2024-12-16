@@ -14,16 +14,19 @@ export const action = async ({ request }) => {
   const formData = await request.formData();
   const doctor = formData.get("doctor");
   const reservedDate = formData.get("reservedDate");
+  const patient = formData.get("patient");
 
   if (!doctor || !reservedDate) {
     throw new Error("Docteur ou date de rendez-vous non sélectionné.");
   }
 
+  console.log(patient);
+
   try {
     const { data } = await axios.post("/api/v1/appointments", {
       date: reservedDate,
       doctorId: doctor,
-      patientId: "6707d96b65816cd4c6b4dd38",
+      patientId: patient,
     });
 
     toast.success(data.msg);
@@ -175,8 +178,8 @@ const Appointment = () => {
     }
 
     try {
-      const { data } = await axios.get("/api/v1/doctors/options", {
-        params: { _id: updatedValues.doctor },
+      const { data } = await axios.post("/api/v1/doctors/options", {
+        _id: updatedValues.doctor,
       });
 
       setCurrentDoctor(data.doctors);
@@ -186,8 +189,6 @@ const Appointment = () => {
   };
 
   if (user) {
-    console.log(user._id);
-
     if (user.role === "doctor") {
       navigate("/");
     }

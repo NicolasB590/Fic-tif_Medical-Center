@@ -1,0 +1,7 @@
+Reste à implémenter :
+ - préremplissage du formulaire de prise de rendez-vous
+ - lien dans le side-menu pour aller vers la page individuelle de médecin
+ - gestion des avatars personnalisés
+ - refonte du side menu
+ - page about
+ - footer

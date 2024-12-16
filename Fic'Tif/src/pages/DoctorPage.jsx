@@ -2,19 +2,18 @@ import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/useAuth.jsx";
-import { toast } from "react-toastify"; // Import du toast
+import { toast } from "react-toastify";
+import Loading from "../components/Loading.jsx";
 
 const DoctorPage = () => {
   const [searchParams] = useSearchParams();
-  const doctorId = searchParams.get("id"); // Récupère l'ID du médecin depuis l'URL
+  const doctorId = searchParams.get("id");
   const [doctor, setDoctor] = useState(null);
   const { user } = useAuth();
-  const navigate = useNavigate(); // Pour gérer les redirections
+  const navigate = useNavigate();
 
-  // Récupération des données du médecin via l'API
   useEffect(() => {
     if (!doctorId) {
-      // Si aucun ID n'est trouvé dans l'URL, redirige immédiatement vers la page d'accueil
       navigate("/");
       return;
     }
@@ -25,15 +24,10 @@ const DoctorPage = () => {
           params: { _id: doctorId },
         });
 
-        console.log(`réponse : ${JSON.stringify(response)}`);
-
-        // Vérifie et extrait le médecin si les données sont présentes
         const doctorData = response.data.doctor;
-        console.log(`doctorData : ${JSON.stringify(doctorData, null, 2)}`);
         if (doctorData) {
           setDoctor(doctorData);
         } else {
-          // Redirection et affichage du toast si aucun médecin n'est trouvé
           toast.error("Aucun médecin trouvé pour cet ID.");
           navigate("/");
         }
@@ -42,7 +36,6 @@ const DoctorPage = () => {
           "Erreur lors de la récupération des informations du médecin :",
           error,
         );
-        // Redirection et affichage du toast en cas d'erreur
         toast.error("Erreur lors du chargement des informations du médecin.");
         navigate("/");
       }
@@ -52,7 +45,12 @@ const DoctorPage = () => {
   }, [doctorId, navigate]);
 
   if (!doctor) {
-    return <p>Chargement des informations...</p>;
+    return (
+      <>
+        <Loading />
+        <p>Chargement des informations...</p>
+      </>
+    );
   }
 
   return (
@@ -60,13 +58,15 @@ const DoctorPage = () => {
       {/* Header */}
       <div className="flex items-center gap-4">
         <img
-          src={doctor.user?.avatar || "/default-avatar.png"} // Fallback si pas d'avatar
-          alt={`Avatar of ${doctor.user?.firstName} ${doctor.user?.lastName}`}
+          src={doctor.user?.avatar || "/user-circle-duotone.svg"}
+          alt={`Avatar de ${doctor.user?.firstName} ${doctor.user?.lastName}`}
           className="h-24 w-24 self-center rounded-full"
         />
         <div>
-          <h1 className="text-2xl font-bold">{`Dr. ${doctor.user?.firstName} ${doctor.user?.lastName}`}</h1>
-          <p className="text-gray-600">{doctor.speciality || "Généraliste"}</p>
+          <h2 className="text-2xl font-bold text-base-content">{`Dr. ${doctor.user?.firstName} ${doctor.user?.lastName}`}</h2>
+          <p className="text-xl text-primary">
+            {doctor.speciality || "Généraliste"}
+          </p>
         </div>
       </div>
 
@@ -74,23 +74,23 @@ const DoctorPage = () => {
 
       {/* Détails */}
       <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div className="rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="mb-2 text-lg font-semibold">Contact</h2>
-          <p className="text-gray-700">
-            <span className="font-medium">Email :</span>{" "}
+        <div className="rounded-lg bg-base-300 p-4 shadow-lg">
+          <h3 className="mb-2 text-lg font-semibold text-primary">Contact</h3>
+          <p>
+            <span className="font-medium text-secondary">Email :</span>{" "}
             {doctor.user?.email || "Non renseigné"}
           </p>
-          <p className="text-gray-700">
-            <span className="font-medium">Téléphone :</span>{" "}
+          <p>
+            <span className="font-medium text-secondary">Téléphone :</span>{" "}
             {doctor.user?.phoneNumber || "Non renseigné"}
           </p>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow-lg">
-          <h2 className="mb-2 text-lg font-semibold">
+        <div className="rounded-lg bg-base-300 p-4 shadow-lg">
+          <h3 className="mb-2 text-lg font-semibold text-primary">
             Informations supplémentaires
-          </h2>
-          <p className="text-gray-700">
-            <span className="font-medium">Adresse :</span>{" "}
+          </h3>
+          <p>
+            <span className="font-medium text-secondary">Adresse :</span>{" "}
             {doctor.user?.address || "Non renseignée"}
           </p>
         </div>
@@ -103,8 +103,8 @@ const DoctorPage = () => {
         <div className="text-center">
           <Link
             to={{
-              pathname: "/appointments",
-              search: `?id=${doctor.doctor}`, // Passe l'ID du médecin pour préremplir le formulaire
+              pathname: "/appointment",
+              search: `?id=${doctor.user?.doctor}`,
             }}
           >
             <button className="btn btn-primary px-6 py-3 text-lg font-semibold">

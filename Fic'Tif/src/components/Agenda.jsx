@@ -3,17 +3,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { format, startOfWeek, addDays, parseISO, isSameWeek } from "date-fns";
 
-// Fonction pour formater les dates au format JJ/MM/AAAA
 const formatDate = (date) => {
   return format(date, "dd/MM/yyyy");
 };
 
-// Fonction pour formater l'heure des rendez-vous au format HH:mm
 const formatTime = (date) => {
   return format(date, "HH:mm");
 };
 
-// Fonction pour grouper les rendez-vous par jour
 const groupAppointmentsByDay = (appointments) => {
   return appointments.reduce((grouped, appointment) => {
     const day = format(parseISO(appointment.date), "yyyy-MM-dd");
@@ -25,7 +22,6 @@ const groupAppointmentsByDay = (appointments) => {
   }, {});
 };
 
-// Fonction pour diviser les rendez-vous en semaines
 const groupAppointmentsByWeek = (appointments) => {
   const weeks = [];
   let currentWeek = [];
@@ -34,7 +30,6 @@ const groupAppointmentsByWeek = (appointments) => {
   for (let appointment of appointments) {
     const appointmentDate = parseISO(appointment.date);
     if (!isSameWeek(appointmentDate, currentStartOfWeek)) {
-      // Si on change de semaine, push la semaine actuelle dans le tableau
       weeks.push(currentWeek);
       currentWeek = [];
       currentStartOfWeek = startOfWeek(appointmentDate);
@@ -43,7 +38,7 @@ const groupAppointmentsByWeek = (appointments) => {
   }
 
   if (currentWeek.length) {
-    weeks.push(currentWeek); // Ajoute la dernière semaine
+    weeks.push(currentWeek);
   }
 
   return weeks;
@@ -52,20 +47,20 @@ const groupAppointmentsByWeek = (appointments) => {
 const getAppointments = async () => {
   try {
     const response = await axios.post("/api/v1/appointments/user");
-    console.log(response.data.appointments); // Vérifier la structure des données
+    console.log(response.data.appointments);
     return Array.isArray(response.data.appointments)
       ? response.data.appointments
-      : []; // S'assurer que c'est un tableau
+      : [];
   } catch (error) {
     console.log(error);
     toast.error(
       "Une erreur est survenue lors de la récupération des rendez-vous.",
     );
-    return []; // En cas d'erreur, retourner un tableau vide
+    return [];
   }
 };
 
-const DoctorAgenda = () => {
+const Agenda = () => {
   const [appointments, setAppointments] = useState(null);
   const [currentWeekIndex, setCurrentWeekIndex] = useState(1);
 
@@ -73,8 +68,6 @@ const DoctorAgenda = () => {
     const fetchAppointments = async () => {
       const fetchedAppointments = await getAppointments();
       setAppointments(fetchedAppointments);
-
-      // Calculer l'index de la semaine actuelle
       const weeklyAppointments = groupAppointmentsByWeek(fetchedAppointments);
       const today = new Date();
       const currentWeekStart = startOfWeek(today, { weekStartsOn: 1 });
@@ -86,7 +79,6 @@ const DoctorAgenda = () => {
         return isSameWeek(currentWeekStart, weekStart);
       });
 
-      // Si la semaine en cours est trouvée, l'utiliser, sinon mettre à 0
       setCurrentWeekIndex(currentIndex !== -1 ? currentIndex : 0);
     };
     fetchAppointments();
@@ -96,10 +88,8 @@ const DoctorAgenda = () => {
     return <div>Chargement des rendez-vous...</div>;
   }
 
-  // Grouper les rendez-vous par semaine
   const weeklyAppointments = groupAppointmentsByWeek(appointments);
 
-  // Obtenir les rendez-vous de la semaine actuelle
   const currentWeekAppointments = weeklyAppointments[currentWeekIndex] || [];
 
   return (
@@ -202,4 +192,4 @@ const DoctorAgenda = () => {
   );
 };
 
-export default DoctorAgenda;
+export default Agenda;

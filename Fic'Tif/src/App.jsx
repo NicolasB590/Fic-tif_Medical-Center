@@ -58,7 +58,7 @@ const App = () => {
           // loader: cocktailsLoader,
         },
         {
-          path: "appointment",
+          path: "appointment/:id?",
           element: <Appointment />,
           errorElement: <div>Error</div>,
           action: appointmentAction,

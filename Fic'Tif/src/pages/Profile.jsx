@@ -1,14 +1,12 @@
 import { useAuth } from "../context/useAuth.jsx";
 import { useLocation } from "react-router-dom";
-import PatientAgenda from "../components/PatientAgenda.jsx";
-import DoctorAgenda from "../components/DoctorAgenda.jsx";
 import Settings from "../components/Settings.jsx";
 import UserProfile from "../components/UserProfile.jsx";
 import Loading from "../components/Loading.jsx";
+import Agenda from "../components/Agenda.jsx";
 
 const Profile = () => {
   const { user, checkIfLoggedIn } = useAuth();
-  // console.log(JSON.stringify(user, null, 2));
 
   if (user === null) {
     checkIfLoggedIn();
@@ -65,15 +63,7 @@ const Profile = () => {
         role="tabpanel"
         className="tab-content h-full rounded-box border-base-300 bg-base-100 p-6"
       >
-        {user !== null ? (
-          user.role === "patient" ? (
-            <PatientAgenda />
-          ) : (
-            <DoctorAgenda />
-          )
-        ) : (
-          <Loading />
-        )}
+        {user !== null ? <Agenda /> : <Loading />}
       </div>
     </div>
   );

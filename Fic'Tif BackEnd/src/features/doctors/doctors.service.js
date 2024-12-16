@@ -1,23 +1,19 @@
 import Doctor from "./doctors.model.js";
 import User from "../users/users.model.js";
-import mongoose from "mongoose";
 
 const get = (id) => {
 	return Doctor.findById(id);
 };
 
 const getAllInformations = ({ params }) => {
-	// Récupérer l'id utilisateur depuis les paramètres
 	const userId = params._id;
 
 	console.log(userId);
 
-	return Doctor.findOne({ user: userId }) // Chercher dans le champ `user`
-		.select("-_id") // Exclure le champ `_id` du document principal
-		.populate({
-			path: "user", // Peupler les données de l'utilisateur
-			select: "-_id -birthDate -role", // Exclure certains champs du modèle user
-		});
+	return Doctor.findOne({ user: userId }).select("-_id").populate({
+		path: "user",
+		select: "-_id -birthDate -role",
+	});
 };
 
 const update = (userId, change) => {
@@ -68,7 +64,6 @@ const getAllByOptions = async (options) => {
 };
 
 const searchDoctors = async (searchTerm) => {
-	// Recherche des utilisateurs avec le rôle "doctor"
 	const searchResult = await User.find({
 		$and: [
 			{
@@ -80,19 +75,18 @@ const searchDoctors = async (searchTerm) => {
 			{ role: "doctor" },
 		],
 	})
-		.select("firstName lastName role _id") // Sélectionner l'ID de l'utilisateur et les autres champs nécessaires
+		.select("firstName lastName role _id")
 		.populate({
-			path: "doctor", // Le champ `doctor` doit être ajouté pour récupérer les informations du médecin
-			model: "Doctor", // On précise le modèle à peupler
-			select: "speciality", // Sélectionner uniquement la spécialité du médecin
+			path: "doctor",
+			model: "Doctor",
+			select: "speciality",
 		});
 
 	console.log(searchResult);
 
-	// Maintenant, chaque utilisateur dans searchResult aura une propriété doctorId avec la spécialité
 	return searchResult.map((user) => ({
-		...user.toObject(), // Convertir l'objet Mongoose en objet JavaScript simple
-		speciality: user.doctor ? user.doctor.speciality : null, // Ajouter la spécialité au résultat
+		...user.toObject(),
+		speciality: user.doctor ? user.doctor.speciality : null,
 	}));
 };
 
