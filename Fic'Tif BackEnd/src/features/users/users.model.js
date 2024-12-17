@@ -28,7 +28,7 @@ const UserSchema = new Schema({
 	email: {
 		type: String,
 		required: [true, "Veuillez fournir un email"],
-		unique: true, // Assurer l'unicité de l'email
+		unique: true,
 		match: [
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 			"Veuillez fournir un email valide",
@@ -57,19 +57,18 @@ const UserSchema = new Schema({
 	},
 	gender: {
 		type: String,
-		enum: ["man", "woman"], // Correction ici : "enum" au lieu de "emun"
+		enum: ["man", "woman"],
 		required: true,
 	},
 	doctor: {
 		type: Schema.Types.ObjectId,
-		ref: "Doctor", // On référence le modèle 'Doctor'
+		ref: "Doctor",
 	},
 });
 
 // Hachage du mot de passe avant la sauvegarde
 UserSchema.pre("save", async function () {
 	if (this.isModified("password")) {
-		// On vérifie si le mot de passe a été modifié
 		const salt = await bcrypt.genSalt();
 		this.password = await bcrypt.hash(this.password, salt);
 	}
@@ -78,7 +77,6 @@ UserSchema.pre("save", async function () {
 // Hachage du mot de passe avant la mise à jour
 UserSchema.pre("findOneAndUpdate", async function () {
 	if (this._update.password) {
-		// On vérifie si le mot de passe a été mis à jour
 		const salt = await bcrypt.genSalt();
 		this._update.password = await bcrypt.hash(this._update.password, salt);
 	}
@@ -87,7 +85,7 @@ UserSchema.pre("findOneAndUpdate", async function () {
 // Méthode pour exclure le mot de passe lors de la conversion en JSON
 UserSchema.methods.toJSON = function () {
 	let userObject = this.toObject();
-	delete userObject.password; // Exclure le mot de passe
+	delete userObject.password;
 	return userObject;
 };
 
