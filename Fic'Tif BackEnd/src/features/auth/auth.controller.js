@@ -28,7 +28,6 @@ const registerDoctor = async (req, res) => {
 };
 
 const login = async (req, res) => {
-	console.log(req.body);
 	const user = await usersService.get({ email: req.body.email });
 
 	if (!user) {
@@ -40,7 +39,6 @@ const login = async (req, res) => {
 
 	const isPasswordCorrect = await user.comparePasswords(req.body.password);
 	if (!isPasswordCorrect) {
-		// Si le mot de passe est incorrect, lance une erreur d'authentification
 		throw new UnauthenticatedError("Identifiants invalides.");
 	}
 
@@ -49,7 +47,6 @@ const login = async (req, res) => {
 	});
 
 	const oneDay = 24 * 60 * 60 * 1000;
-	const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
 	res.cookie("accessToken", token, {
 		HttpOnly: true,
