@@ -5,11 +5,13 @@ export default {
     extend: {},
   },
   important: true,
+  // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],
   daisyui: {
     themes: [
       {
         cupcake: {
+          // eslint-disable-next-line no-undef
           ...require("daisyui/src/theming/themes")["cupcake"],
           primary: "#38bdf8",
           secondary: "#fb923c",
@@ -18,6 +20,7 @@ export default {
       },
       {
         dim: {
+          // eslint-disable-next-line no-undef
           ...require("daisyui/src/theming/themes")["dim"],
           primary: "#38bdf8",
           secondary: "#fb923c",

@@ -14,6 +14,7 @@ import SearchDoctors from "./SearchDoctors.jsx";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [defaultAvatar, setDefaultAvatar] = useState(
     "/user-circle-duotone.svg",
   );

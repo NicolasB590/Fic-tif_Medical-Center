@@ -9,6 +9,7 @@ const SearchDoctors = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     debounce(async (searchTerm) => {
       if (!searchTerm) {

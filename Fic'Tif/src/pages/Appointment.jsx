@@ -10,6 +10,7 @@ import generateReservationSlots from "../utils/functions/generateReservationSlot
 import { toast } from "react-toastify";
 import { useAuth } from "../context/useAuth.jsx";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const doctor = formData.get("doctor");
