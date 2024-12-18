@@ -42,50 +42,42 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      // errorElement: <ErrorPage />,
       element: <SharedLayout />,
       children: [
         {
           index: true,
           element: <Home />,
           errorElement: <div>Error</div>,
-          // loader: homeLoader,
         },
         {
           path: "doctors",
           element: <Services />,
           errorElement: <div>Error</div>,
-          // loader: cocktailsLoader,
         },
         {
           path: "appointment/:id?",
           element: <Appointment />,
           errorElement: <div>Error</div>,
           action: appointmentAction,
-          // loader: cocktailsLoader,
         },
         {
           path: "profile",
           element: <Profile />,
           errorElement: <div>Error</div>,
-          // loader: cocktailsLoader,
         },
         {
           path: "doctorPage",
           element: <DoctorPage />,
           errorElement: <div>Error</div>,
-          // loader: cocktailsLoader,
         },
       ],
     },
     {
       path: "login",
-      // errorElement: <ErrorPage/>,
       element: <Login />,
     },
     {
       path: "register",
-      // errorElement: <ErrorPage/>,
       element: <Register />,
       action: registerAction,
     },

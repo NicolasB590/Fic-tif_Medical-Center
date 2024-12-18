@@ -9,7 +9,7 @@ const SideMenuDrawer = ({ children }) => {
         {children}
         <label
           htmlFor="my-drawer-2"
-          className="btn fixed bottom-2 left-1 animate-bounce cursor-pointer text-4xl text-primary transition-all duration-500 hover:text-secondary lg:hidden"
+          className="btn fixed bottom-10 left-1 animate-bounce cursor-pointer text-4xl text-primary transition-all duration-500 hover:text-secondary lg:hidden"
         >
           <PiCaretLeftDuotone />
         </label>

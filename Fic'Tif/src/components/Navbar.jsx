@@ -74,7 +74,7 @@ const Navbar = () => {
                       <img src={`${user.avatar}`} alt="Image de profil" />
                     )
                   ) : (
-                    <PiUserCircleDuotone className="text-[64px] text-primary transition-all duration-500 hover:text-secondary md:text-[40px]" />
+                    <PiUserCircleDuotone className="text-[40px] text-primary transition-all duration-500 hover:text-secondary md:text-[40px]" />
                   )}
                 </div>
               </div>
