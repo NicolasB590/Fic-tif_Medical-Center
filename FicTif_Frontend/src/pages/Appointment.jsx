@@ -2,6 +2,9 @@
 import moment from "moment-timezone";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { useFetcher, redirect, useNavigate } from "react-router-dom";
 
 import MyCalendar from "../components/BigCalendar.jsx";
@@ -24,7 +27,7 @@ export const action = async ({ request }) => {
   console.log(patient);
 
   try {
-    const { data } = await axios.post("/api/v1/appointments", {
+    const { data } = await apiClient.post("/api/v1/appointments", {
       date: reservedDate,
       doctorId: doctor,
       patientId: patient,
@@ -61,7 +64,7 @@ const Appointment = () => {
 
   const getAllSpecialities = async () => {
     try {
-      const { data } = await axios.get("/api/v1/doctors/specialities");
+      const { data } = await apiClient.get("/api/v1/doctors/specialities");
       setSpecialities(data.specialities);
     } catch (error) {
       console.log(error);
@@ -70,7 +73,7 @@ const Appointment = () => {
 
   const getDoctorsBySpeciality = async (speciality) => {
     try {
-      const { data } = await axios.post("/api/v1/doctors/bySpeciality", {
+      const { data } = await apiClient.post("/api/v1/doctors/bySpeciality", {
         speciality,
       });
       return data.doctors;
@@ -114,7 +117,7 @@ const Appointment = () => {
 
   const getReservedSlots = async (doctorId) => {
     try {
-      const { data } = await axios.post("/api/v1/appointments/doctors", {
+      const { data } = await apiClient.post("/api/v1/appointments/doctors", {
         doctorId,
       });
       return data;
@@ -179,7 +182,7 @@ const Appointment = () => {
     }
 
     try {
-      const { data } = await axios.post("/api/v1/doctors/options", {
+      const { data } = await apiClient.post("/api/v1/doctors/options", {
         _id: updatedValues.doctor,
       });
 

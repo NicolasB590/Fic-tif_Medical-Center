@@ -6,6 +6,9 @@ import {
   PiUserCircleDuotone,
 } from "react-icons/pi";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -62,7 +65,9 @@ const UserProfile = ({ type }) => {
     }
 
     try {
-      await axios.put(`/api/v1/users`, { [field]: value });
+      await apiClient.put(`/api/v1/users`, {
+        [field]: value,
+      });
     } catch (error) {
       console.log(error);
     }

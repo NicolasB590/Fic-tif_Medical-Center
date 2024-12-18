@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth.jsx";
@@ -15,7 +18,7 @@ const Settings = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await axios.delete("/api/v1/users/");
+      await apiClient.delete("/api/v1/users/");
       toast.success("Votre compte a été supprimé avec succès.");
 
       logout();
@@ -29,7 +32,7 @@ const Settings = () => {
 
   const handleChangePassword = async () => {
     try {
-      await axios.put("/api/v1/users/", {
+      await apiClient.put("/api/v1/users/", {
         password: newPassword,
       });
       toast.success("Mot de passe changé avec succès.");

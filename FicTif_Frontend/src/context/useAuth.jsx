@@ -1,5 +1,8 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { toast } from "react-toastify";
 import { redirect } from "react-router-dom";
 import { createAvatar } from "@dicebear/avatars";
@@ -13,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkIfLoggedIn = async () => {
     try {
-      const { data } = await axios.get("/api/v1/auth/isLogged");
+      const { data } = await apiClient.get("/api/v1/auth/isLogged");
 
       if (data?.user) {
         if (!data.user.avatar) {
@@ -61,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      await axios.post("/api/v1/auth/login", {
+      await apiClient.post("/api/v1/auth/login", {
         email,
         password,
       });
@@ -84,8 +87,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios("/api/v1/auth/logout", {
-        method: "POST",
+      await apiClient.post("/api/v1/auth/logout", {
         credentials: "include",
       });
 

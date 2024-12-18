@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { toast } from "react-toastify";
 import { format, startOfWeek, addDays, parseISO, isSameWeek } from "date-fns";
 
@@ -46,7 +49,7 @@ const groupAppointmentsByWeek = (appointments) => {
 
 const getAppointments = async () => {
   try {
-    const response = await axios.post("/api/v1/appointments/user");
+    const response = await apiClient.post("/api/v1/appointments/user");
     console.log(response.data.appointments);
     return Array.isArray(response.data.appointments)
       ? response.data.appointments

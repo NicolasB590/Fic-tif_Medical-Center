@@ -4,6 +4,9 @@ import { Form, Link, redirect, useFetcher } from "react-router-dom";
 import { toast } from "react-toastify";
 import ConditionOfUse from "../components/ConditionOfUse.jsx";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
@@ -41,19 +44,16 @@ export const action = async ({ request }) => {
   } = Object.fromEntries(formData);
 
   try {
-    const { data } = await axios.post(
-      "http://localhost:5000/api/v1/auth/register/patient",
-      {
-        birthDate: `${month}/${day}/${year}`,
-        firstName: firstname,
-        lastName: lastname,
-        address,
-        phoneNumber: phone,
-        email,
-        password,
-        gender,
-      },
-    );
+    const { data } = await apiClient.post("/api/v1/auth/register/patient", {
+      birthDate: `${month}/${day}/${year}`,
+      firstName: firstname,
+      lastName: lastname,
+      address,
+      phoneNumber: phone,
+      email,
+      password,
+      gender,
+    });
 
     toast.success(data.msg);
 

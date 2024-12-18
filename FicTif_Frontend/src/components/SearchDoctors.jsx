@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { debounce } from "lodash";
 import { Link } from "react-router-dom";
 
@@ -19,7 +22,7 @@ const SearchDoctors = () => {
 
       setLoading(true);
       try {
-        const response = await axios.post(`/api/v1/doctors/search`, {
+        const response = await apiClient.post(`/api/v1/doctors/search`, {
           searchTerm,
         });
         console.log(response.data.searchResult);

@@ -1,6 +1,9 @@
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+const apiClient = axios.create({
+  baseURL: import.meta.env.API_BASE_URL,
+});
 import { useAuth } from "../context/useAuth.jsx";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading.jsx";
@@ -20,9 +23,12 @@ const DoctorPage = () => {
 
     const fetchDoctor = async () => {
       try {
-        const response = await axios.post(`/api/v1/doctors/getInformations/`, {
-          params: { _id: doctorId },
-        });
+        const response = await apiClient.post(
+          `/api/v1/doctors/getInformations/`,
+          {
+            params: { _id: doctorId },
+          },
+        );
 
         const doctorData = response.data.doctor;
         if (doctorData) {

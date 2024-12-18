@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://fic-tif-medical-center.onrender.com/api/:splat"
+  status = 200
