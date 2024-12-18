@@ -94,8 +94,6 @@ export const AuthProvider = ({ children }) => {
 
       toast.success("Vous êtes maintenant déconnecté");
     } catch (error) {
-      console.log(error);
-
       toast.error(
         error?.msg
           ? error.msg
