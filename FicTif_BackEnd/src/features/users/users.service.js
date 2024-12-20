@@ -42,6 +42,8 @@ const remove = (id) => {
 };
 
 const create = (data) => {
+	console.log(data);
+
 	return User(data).save();
 };
 

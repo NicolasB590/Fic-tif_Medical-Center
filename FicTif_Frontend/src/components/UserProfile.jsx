@@ -50,8 +50,6 @@ const UserProfile = ({ type }) => {
   };
 
   const handleSave = async (field) => {
-    console.log(`Updating ${field}:`, formData[field]);
-
     let value;
 
     if (field === "email") {

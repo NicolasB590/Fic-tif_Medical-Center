@@ -32,7 +32,7 @@ const RegisterDoctorSchema = z.object({
 		.string()
 		.trim()
 		.min(6, { message: "Doit avoir au minimum 6 caractères" }),
-	adress: z
+	address: z
 		.string()
 		.trim()
 		.min(8, { message: "Doit avoir au minimum 10 caractères" })
@@ -45,6 +45,7 @@ const RegisterDoctorSchema = z.object({
 		.regex(/^\d{10}$/, {
 			message: "Le numéro de téléphone doit contenir uniquement des chiffres.",
 		}),
+	gender: z.enum(["man", "woman"]),
 	speciality: z
 		.string()
 		.trim()

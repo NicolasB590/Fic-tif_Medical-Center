@@ -19,6 +19,8 @@ const registerPatient = async (req, res) => {
 
 const registerDoctor = async (req, res) => {
 	const role = "doctor";
+	console.log(`CONTROLLER : ${req.body}`);
+
 	const user = await usersService.create({ ...req.body, role });
 
 	const doctorData = { speciality: req.body.speciality, user: user.id };

@@ -7,17 +7,19 @@ import { StatusCodes } from "http-status-codes";
 const get = async (req, res) => {
 	const id = req.params;
 
-	const user = await usersService.get(id.id);
+	const user = await usersService.get(id);
+
+	console.log(`CONTROLLER : ${user}`);
 
 	let userInfo = user;
 
 	if (user.role === "doctor") {
-		const doctorInfo = await doctorService.get(id.id);
+		const doctorInfo = await doctorService.get(id);
 		if (doctorInfo) {
 			userInfo = { ...user._doc, doctorInfo };
 		}
 	} else if (user.role === "patient") {
-		const patientInfo = await patientService.get(id.id);
+		const patientInfo = await patientService.get(id);
 		if (patientInfo) {
 			userInfo = { ...user._doc, patientInfo };
 		}
@@ -27,8 +29,6 @@ const get = async (req, res) => {
 
 // Récupère une liste d'utilisateurs selons des critères, tous les utilisateurs si aucun critère
 const getAllByOptions = async (req, res) => {
-	console.log(req.query);
-
 	const users = await usersService.getAllByOptions(req.query);
 	res.status(StatusCodes.OK).json({ users });
 };
@@ -36,9 +36,6 @@ const getAllByOptions = async (req, res) => {
 // Met à jour un utilisateur
 const update = async (req, res) => {
 	const id = req.user.id;
-
-	console.log(req.user.id);
-	console.log(req.body);
 
 	const updatedUser = await usersService.update(id, req.body);
 	if (!updatedUser) {
