@@ -4,5 +4,4 @@ Reste à implémenter :
  - gestion des avatars personnalisés
  - refonte du side menu
  - page about
- - footer
  - la validation de shema pour le put de users dans user.route
