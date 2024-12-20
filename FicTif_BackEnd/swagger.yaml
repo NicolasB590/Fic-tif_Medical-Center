@@ -1,0 +1,239 @@
+openapi: 3.0.0
+info:
+  title: Fic'Tif_Medical-Center
+  version: 1.0.0
+servers:
+  - url: http://{{url}}
+tags:
+  - name: Users Patients
+  - name: Users Doctors
+  - name: Appointements
+  - name: Users
+  - name: Doctors
+paths:
+  /auth/register/patient:
+    post:
+      tags:
+        - Users Patients
+      summary: Register Patient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstName: Olivier
+                lastName: Vasseur
+                birthDate: '1990-05-25'
+                email: olivier.vasseur3@example.com
+                password: secret
+                address: 100 Rue de Clermont, Clermont-Ferrand
+                phoneNumber: '0123456703'
+                gender: man
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/login:
+    post:
+      tags:
+        - Users Doctors
+      summary: Login Doctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: maxime.dubois@example.com
+                password: secret
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/register/doctor:
+    post:
+      tags:
+        - Users Doctors
+      summary: Register Doctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                firstName: Maxime
+                lastName: Dubois
+                birthDate: '1990-05-12'
+                email: maxime.dubois@example.com
+                password: secret
+                address: 7 Avenue de Paris,59000 Lille
+                phoneNumber: '0123456789'
+                gender: man
+                speciality: Surgery
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /appointments:
+    post:
+      tags:
+        - Appointements
+      summary: Create Appointment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                date: '2024-12-20T13:30:00'
+                doctorId: 67652e7cb584bcb4d5bea965
+                patientId: 676527e6b3a4ddaa0c43f03e
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Appointements
+      summary: Get Appointment
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /appointments/670fbe26157065757803c3cf:
+    put:
+      tags:
+        - Appointements
+      summary: Put Appointment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                status: done
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Appointements
+      summary: Delete Appointment
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/maxime.dubois@example.com:
+    get:
+      tags:
+        - Users
+      summary: Get User
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/:
+    get:
+      tags:
+        - Users
+      summary: Get Users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Users
+      summary: Put User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: olivier.vasseur4@example.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Users
+      summary: Delete User
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get Users ByOptions
+      parameters:
+        - name: firstName
+          in: query
+          schema:
+            type: string
+          example: Sam
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /doctors/specialities:
+    get:
+      tags:
+        - Doctors
+      summary: GetAll Specialities
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /doctors/options:
+    post:
+      tags:
+        - Doctors
+      summary: GetAll ByOptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                speciality: Neurology
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /doctors/bySpeciality:
+    post:
+      tags:
+        - Doctors
+      summary: GetDoctors BySpeciality
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                speciality: Neurology
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

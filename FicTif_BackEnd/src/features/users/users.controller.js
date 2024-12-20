@@ -9,8 +9,6 @@ const get = async (req, res) => {
 
 	const user = await usersService.get(id);
 
-	console.log(`CONTROLLER : ${user}`);
-
 	let userInfo = user;
 
 	if (user.role === "doctor") {
@@ -62,7 +60,6 @@ const update = async (req, res) => {
 // Supprime un utilisateur
 const remove = async (req, res) => {
 	const id = req.user.id;
-	console.log(id);
 
 	const deletedUser = await usersService.remove(id);
 	if (!deletedUser) {

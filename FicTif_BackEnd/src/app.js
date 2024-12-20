@@ -12,6 +12,8 @@ import errorHandler from "./middlewares/error-handler.js";
 import notFound from "./middlewares/not-found.middleware.js";
 import cookieParser from "cookie-parser";
 
+const swaggerDocument = YAML.load("./swagger.yaml");
+
 const app = express();
 app.use(helmet());
 
@@ -33,6 +35,14 @@ app.use(cors());
 connectDB();
 
 app.use(express.json());
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+app.get("/", (_req, res) => {
+	res
+		.status(StatusCodes.OK)
+		.send("<h1>FICTIF</h1><a href='/api-docs'>Documentation</a>");
+});
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
