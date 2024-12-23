@@ -24,8 +24,6 @@ export const action = async ({ request }) => {
     throw new Error("Docteur ou date de rendez-vous non sélectionné.");
   }
 
-  console.log(patient);
-
   try {
     const { data } = await apiClient.post("/api/v1/appointments", {
       date: reservedDate,
@@ -208,9 +206,9 @@ const Appointment = () => {
         appointment === true ? "w-full min-w-96" : ""
       }`}
     >
-      <h1 className="mb-8 text-center text-2xl font-bold">
+      <h2 className="mb-8 text-center text-2xl font-bold">
         Prendre un rendez-vous
-      </h1>
+      </h2>
       <form ref={formRef}>
         <label
           htmlFor="speciality"
@@ -259,9 +257,9 @@ const Appointment = () => {
 
             {appointment === true ? (
               <>
-                <h2 className="m-4 text-center text-xl font-semibold">
+                <h3 className="m-4 text-center text-xl font-semibold">
                   Choissisez un horaire
-                </h2>
+                </h3>
                 <div>
                   <MyCalendar
                     defaultView={"weekdays"}
