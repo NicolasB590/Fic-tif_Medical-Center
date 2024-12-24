@@ -1,0 +1,16 @@
+{
+	"dependencies": {
+		"reveal.js": "^5.1.0"
+	},
+	"name": "fictif_presentation",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "http-server slides",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": ""
+}
