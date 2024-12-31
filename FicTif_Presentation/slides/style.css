@@ -1,0 +1,58 @@
+/* Appliquer le cadre uniquement aux sections principales */
+.reveal .slides > section {
+	border: 8px solid #fb923c; /* Couleur et épaisseur du cadre */
+	border-radius: 10px; /* Coins arrondis */
+	padding: 20px 0; /* Espacement à l'intérieur du cadre */
+	box-sizing: border-box; /* Inclut les bordures dans les dimensions */
+	height: 100%; /* Prendre toute la hauteur disponible */
+	width: 100%; /* Prendre toute la largeur disponible */
+	display: flex; /* Activer le centrage */
+	flex-direction: column; /* Organisation verticale */
+	justify-content: center; /* Centrer verticalement */
+	align-items: center; /* Centrer horizontalement */
+	text-align: center; /* Centrer le texte */
+}
+
+/* Pas de bordure ni de padding pour les sous-sections */
+.reveal .slides > section > section {
+	max-height: calc(100% - 72px) !important;
+	border: none;
+	padding: 0;
+	height: auto; /* Taille ajustée au contenu */
+}
+
+/* Appliquer la couleur #38bdf8 aux titres */
+h2,
+h3 {
+	color: #38bdf8 !important;
+	font-family: Arial, sans-serif;
+	margin-bottom: 20px;
+}
+
+img {
+	max-height: 22rem !important;
+	width: auto; /* Maintient les proportions */
+	margin: auto;
+	object-fit: cover;
+	align-self: flex-end !important;
+}
+
+.icon {
+	width: 12rem;
+	height: 12rem;
+	object-fit: contain; /* Maintient les proportions de l'image */
+}
+
+pre {
+	padding: 0 !important;
+	margin: 0 auto !important;
+}
+
+pre code {
+	font-size: 1.2rem; /* Taille du texte */
+	padding: 0 1rem !important;
+	margin: 0 !important;
+	border-radius: 8px; /* Coins arrondis */
+	overflow-x: auto; /* Barre de défilement horizontale si besoin */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Effet d'ombre */
+}

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<meta charset="utf-8" />
-		<title>Présentation avec Reveal.js</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Présentation du projet Fictif - BERNARD Nicolas</title>
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"
@@ -11,98 +12,450 @@
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css"
+		/>
+		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
+				<!-- Page de garde -->
+				<section>
+					<h2>FicTif</h2>
+					<p>Centre médical</p>
+					<br />
+					<p>Par Nicolas BERNARD</p>
+					<img src="./image/SOFIP-logo-blanc.png" alt="logo sofip" />
+				</section>
+
 				<!-- Présentation personnelle -->
 				<section>
-					<h2>Présentation personnelle</h2>
-					<p>Parler de moi.</p>
+					<h2>Parcours</h2>
+					<section>
+						<p class="fragment">DEUST IOSI - Mont Houy Valenciennes</p>
+						<p class="fragment">Reconvertion professionnelle</p>
+						<aside class="notes">
+							Cursus universitaire en DEUST IOSI (Informatique d'organisation et
+							systèmes d'information) à Valenciennes. Découverte du
+							développement web + appétence. Entrée en formation suite à une
+							reconversion.
+						</aside>
+					</section>
 				</section>
 
 				<!-- Introduction -->
 				<section>
 					<h2>Introduction</h2>
-					<p>Parler du projet.</p>
+					<section>
+						<h3>La formation Sofip</h3>
+						<aside class="notes">
+							Ces notes ne sont visibles que par moi. Parler des objectifs
+							principaux du projet.
+						</aside>
+					</section>
+					<section>
+						<h3>Le projet FicTif</h3>
+					</section>
 				</section>
 
 				<!-- Présentation du projet -->
 				<section>
 					<h2>Présentation du projet</h2>
-					<p>Une brève introduction sur le projet.</p>
-				</section>
-
-				<!-- Concept -->
-				<section>
-					<h2>Concept</h2>
 					<section>
-						<h3>Services</h3>
-						<p>Détails sur les services proposés.</p>
+						<h3>Ambitions</h3>
+						<p>Une brève introduction sur les objectifs fixés.</p>
+					</section>
+					<section>
+						<h3>Services devant être délivrés</h3>
+						<ul>
+							<li class="fragment">Prise de rendez-vous</li>
+							<li class="fragment">Consulter la liste des rendez-vous</li>
+							<li class="fragment">Gestion de compte utilisateur</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Besoins fonctionnels</h3>
-						<p>Liste des besoins fonctionnels.</p>
-					</section>
-					<section>
-						<h3>Problématiques & solutions</h3>
-						<p>Description des problèmes et les solutions apportées.</p>
+						<p>Exemple de besoins fonctionnels pour les patients :</p>
+						<p class="fragment">
+							Je dois être capable, si je suis connecté, d’atteindre la page de
+							rendez-vous POUR prendre rendez-vous avec un médecin
+						</p>
+						<p class="fragment">
+							Je dois être capable, sur la page de rendez-vous, de sélectionner
+							un créneau horaire POUR réserver ce créneau pour mon rendez-vous
+						</p>
 					</section>
 				</section>
 
-				<!-- Réalisation -->
+				<!-- Conception -->
 				<section>
-					<h2>Réalisation</h2>
+					<h2>Conception</h2>
 					<section>
 						<h3>Maquettage & Wireframes</h3>
+						<h4>Index</h4>
+						<img
+							src="./image/Maquettage index.png"
+							alt="Vue de l'index en wireframe"
+						/>
 					</section>
 					<section>
-						<h3>Environnement de développement & Git</h3>
+						<h4>Prise de Rendez-vous</h4>
+						<img
+							src="./image/Maquettage Prise de Rendez-vous.png"
+							alt="Vue de l'index en wireframe"
+						/>
 					</section>
 					<section>
-						<h3>MCD & Base de données MongoDB</h3>
+						<h4>Page Profil</h4>
+						<img
+							src="./image/Maquettage Profil utilisateur.png"
+							alt="Vue de l'index en wireframe"
+						/>
 					</section>
+					<section>
+						<h3>Environnement de développement</h3>
+						<img
+							class="icon fragment"
+							src="./image/github-icon-2.svg"
+							alt="Icône de github"
+						/>
+						<img
+							class="icon fragment"
+							src="./image/png-transparent-visual-studio-code-hd-logo-thumbnail.png"
+							alt="Icône de visual studio code"
+						/>
+					</section>
+					<section>
+						<h3>Utilisation de Git</h3>
+						<img
+							src="./image/Branches git.png"
+							alt="Schéma illustrant l'usage de différentes branches git, 'main', 'feature' et 'rollback'"
+						/>
+					</section>
+					<section>
+						<h3>MCD</h3>
+						<img
+							src="./image/MCD.png"
+							alt="Schéma du MCD réalisé pour le projet"
+						/>
+					</section>
+					<section>
+						<h3>Système de gestion de base de données</h3>
+						<img
+							class="icon"
+							src="./image/mongodb-icon-2.svg"
+							alt="Icône MongoDB"
+						/>
+						<p>Base de données non relationnelle orientée documents</p>
+					</section>
+				</section>
+
+				<!-- Backend -->
+				<section>
+					<h2>Création du backend</h2>
 					<section>
 						<h3>Structure de service backend</h3>
+						<img
+							src="./image/structure back.png"
+							alt="Schéma représentant la vie d'une requête côté backend"
+						/>
+					</section>
+					<section>
+						<h3>Routes</h3>
+						<pre>
+							<code class="language-javascript">
+router.post( "/register/doctor", validate(RegisterDoctorSchema),authController.registerDoctor );
+router.post("/login",validate(LoginUserSchema),authController.login);
+						</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Middlewares</h3>
+						<pre>
+							<code>
+const authenticateUser = (req, _res, next) => {
+	const token = req.signedCookies.accessToken || null;
+
+	if (!token) {
+		throw new UnauthenticatedError("Pas de token fournit");
+	}
+
+	try {
+		const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+		const { id, email } = decodedToken;
+		req.user = { id, email };
+
+		next();
+	} catch (error) {
+		throw new UnauthenticatedError("Accès non autorisé");
+	}
+};
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Controllers</h3>
+						<pre>
+							<code>
+const login = async (req, res) => {
+	const user = await usersService.get({ email: req.body.email });
+
+	if (!user) {
+		throw new UnauthenticatedError("Identifiants invalides.");
+	}
+
+	const id = user._id;
+	const email = user.email;
+
+	const isPasswordCorrect = await user.comparePasswords(req.body.password);
+	if (!isPasswordCorrect) {
+		throw new UnauthenticatedError("Identifiants invalides.");
+	}
+
+	const token = jwt.sign({ id, email }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_LIFETIME,
+	});
+
+	const oneDay = 24 * 60 * 60 * 1000;
+
+	res.cookie("accessToken", token, {
+		HttpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+		expires: new Date(Date.now() + oneDay),
+	});
+
+	res.status(StatusCodes.OK).json({ user: { userId: id } });
+};
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Services</h3>
+						<pre>
+							<code>
+import User from "./users.model.js";
+
+const get = (email) => {
+	return User.findOne(email);
+};
+							</code>
+						</pre>
 					</section>
 					<section>
 						<h3>Sécurité</h3>
+						<ul>
+							<li class="fragment">Hachage du mot de passe</li>
+							<li class="fragment">Helmet</li>
+							<li class="fragment">Json Web Token</li>
+							<li class="fragment">Express Rate Limit</li>
+							<li class="fragment">MongoSanitize</li>
+						</ul>
+					</section>
+				</section>
+
+				<!-- Frontend -->
+				<section>
+					<h2>Création du Frontend</h2>
+					<section>
+						<h3>Router</h3>
+						<pre>
+							<code>
+path: "/",
+element: &lt;SharedLayout /&gt;,
+children: [
+  {
+    index: true,
+    element: &lt;Home /&gt;,
+    errorElement: &lt;div&gt;Error&lt;/div&gt;,
+  },
+  {
+    path: "appointment/:id?",
+    element: &lt;Appointment /&gt;,
+    errorElement: &lt;div&gt;Error&lt;/div&gt;,
+    action: appointmentAction,
+  },
+							</code>
+						</pre>
 					</section>
 					<section>
-						<h3>Router & Layout</h3>
+						<h3>Router</h3>
+						<pre>
+        <code class="language-javascript">
+&lt;main className="relative flex min-h-dvh flex-col items-center bg-base-300"&gt;
+  &lt;AuthProvider&gt;
+    &lt;ThemeContext.Provider value={{ theme, toggleTheme }}&gt;
+      &lt;RouterProvider router={router} /&gt;
+    &lt;/ThemeContext.Provider&gt;
+  &lt;/AuthProvider&gt;
+&lt;/main&gt;
+        </code>
+    </pre>
+						<aside class="notes">
+							J'ai retiré le ToastContainer de la présentation pour gagner en
+							visibilité.
+						</aside>
 					</section>
 					<section>
-						<h3>Tailwind & Style & Responsive</h3>
+						<h3>Layout</h3>
+						<pre>
+        <code class="language-javascript">
+    &lt;&gt;
+      &lt;Navbar /&gt;
+      &lt;SideMenuDrawer&gt;
+        {isPageLoading ? &lt;Loading /&gt; : &lt;Outlet /&gt;}
+      &lt;/SideMenuDrawer&gt;
+      &lt;Footer /&gt;
+    &lt;/&gt;
+        </code>
+    </pre>
 					</section>
 					<section>
-						<h3>Axios & Requêtes</h3>
+						<h3>Visuel du site</h3>
+						<img src="./image/vue_index.png" alt="Vue générale du site" />
 					</section>
 					<section>
-						<h3>Fonctionnalités en vrac</h3>
+						<h3>Visuel du site format mobile</h3>
+						<img
+							src="./image/vue_index_mobile.png"
+							alt="Vue générale du site en format mobile"
+						/>
 					</section>
+					<section>
+						<h3>Tailwind et Breakpoint</h3>
+						<pre>
+							<code class="language-javascript">
+&lt;div className="drawer relative flex-1 bg-base-100 lg:drawer-open xl:max-w-screen-xl"&gt;
+							</code>
+						</pre>
+					</section>
+				</section>
+
+				<!-- Prise de Rendez-vous -->
+				<section>
+					<h2>Prise de Rendez-vous</h2>
+					<section>
+						<h3>Spécialisations des médecins</h3>
+						<pre>
+							<code class="language-javascript">
+const getAllSpecialities = async () => {
+  try {
+    const { data } = await apiClient.get("/api/v1/doctors/specialities");
+    setSpecialities(data.specialities);
+  } catch (error) {
+    console.log(error);
+  }
+};
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Médecins par spécialité</h3>
+						<pre>
+							<code class="language-javascript">
+const getDoctorsBySpeciality = async (speciality) => {
+  try {
+    const { data } = await apiClient.post("/api/v1/doctors/bySpeciality", {
+      speciality,
+    });
+    return data.doctors;
+  } catch (error) {
+    console.log(error);
+  }
+};
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Modale de confirmation</h3>
+						<pre>
+							<code class="language-javascript">
+const handleEventClick = async (event) => {
+  const updatedValues = {
+    doctor: appointmentValues.doctor,
+    reservedDate: event.start,
+    patient: user._id,
+  };
+
+  setAppointmentValues(updatedValues);
+
+  if (modalRef.current) {
+    modalRef.current.showModal();
+  }
+
+  try {
+    const { data } = await apiClient.post("/api/v1/doctors/options", {
+      _id: updatedValues.doctor,
+    });
+
+    setCurrentDoctor(data.doctors);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+if (user) {
+  if (user.role === "doctor") {
+    navigate("/");
+  }
+}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Action de prise de Rendez-vous</h3>
+						<pre>
+							<code class="language-javascript">
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const doctor = formData.get("doctor");
+  const reservedDate = formData.get("reservedDate");
+  const patient = formData.get("patient");
+
+  if (!doctor || !reservedDate) {
+    throw new Error("Docteur ou date de rendez-vous non sélectionné.");
+  }
+
+  try {
+    const { data } = await apiClient.post("/api/v1/appointments", {
+      date: reservedDate,
+      doctorId: doctor,
+      patientId: patient,
+    });
+
+    toast.success(data.msg);
+
+    return redirect("/");
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.msg || "Erreur lors de la prise de rendez-vous";
+    toast.error(errorMessage);
+    return null;
+  }
+};
+							</code>
+						</pre>
+					</section>
+				</section>
+
+				<!-- Autres réalisation -->
+				<section>
+					<h2>Autres réalisations</h2>
+					<ul>
+						<li class="fragment">Système d'authentification</li>
+						<li class="fragment">Theme Toggler</li>
+						<li class="fragment">Recherche de médecin</li>
+						<li class="fragment">Génération d'avatar</li>
+					</ul>
 				</section>
 
 				<!-- Démonstration -->
 				<section>
 					<h2>Démonstration</h2>
 					<section>
-						<h3>Live Demo</h3>
-					</section>
-				</section>
-
-				<!-- Problèmes rencontrés -->
-				<section>
-					<h2>Problèmes rencontrés</h2>
-					<section>
-						<h3>Challenges</h3>
-					</section>
-				</section>
-
-				<!-- Amélioration -->
-				<section>
-					<h2>Amélioration</h2>
-					<section>
-						<h3>Optimisations futures</h3>
+						<a href="https://fictif.freyza.net">Démo</a>
 					</section>
 				</section>
 
@@ -118,8 +471,14 @@
 		</div>
 
 		<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
 		<script>
-			Reveal.initialize();
+			hljs.highlightAll();
+			Reveal.initialize({
+				plugins: [RevealNotes],
+			});
 		</script>
 	</body>
 </html>
