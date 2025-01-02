@@ -50,7 +50,7 @@ const Hero = () => {
                 </NavLink>
                 <NavLink to="/login">
                   <button className="btn btn-primary text-base-100 transition-all duration-500 hover:btn-secondary">
-                    Connection
+                    Connexion
                   </button>
                 </NavLink>
               </div>
