@@ -5,6 +5,10 @@ const get = (id) => {
 	return Doctor.findById(id);
 };
 
+const getByUserId = (id) => {
+	return Doctor.find({ user: id });
+};
+
 const getAllInformations = ({ params }) => {
 	const userId = params._id;
 
@@ -99,4 +103,5 @@ export {
 	getDoctorsBySpeciality,
 	searchDoctors,
 	getAllInformations,
+	getByUserId,
 };

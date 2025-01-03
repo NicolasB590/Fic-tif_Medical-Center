@@ -11,6 +11,7 @@ import connectDB from "./config/db.config.js";
 import errorHandler from "./middlewares/error-handler.js";
 import notFound from "./middlewares/not-found.middleware.js";
 import cookieParser from "cookie-parser";
+import { StatusCodes } from "http-status-codes";
 
 const swaggerDocument = YAML.load("./swagger.yaml");
 

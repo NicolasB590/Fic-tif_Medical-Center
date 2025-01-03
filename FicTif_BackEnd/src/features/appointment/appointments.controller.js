@@ -105,15 +105,18 @@ const getAllById = async (req, res) => {
 
 	if (role === "patient") {
 		speUser = await patientService.get(id);
+		console.log(speUser);
 	} else if (role === "doctor") {
-		speUser = await doctorService.get(id);
+		speUser = await doctorService.getByUserId(id);
+		console.log(speUser);
 	} else {
 		return res
 			.status(StatusCodes.NOT_FOUND)
 			.json({ msg: "Format de l'utilisateur invalide" });
 	}
+	console.log(`ID de l'utilisateur : ${speUser.id}`);
 
-	const appointments = await appointmentService.getAllById(speUser._id);
+	const appointments = await appointmentService.getAllById(speUser.id);
 
 	if (!appointments) {
 		return res
