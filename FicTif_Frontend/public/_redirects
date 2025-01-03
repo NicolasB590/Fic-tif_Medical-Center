@@ -1,0 +1,5 @@
+# Exclure les appels API
+/api/*    https://fic-tif-medical-center.onrender.com/:splat   200
+
+# Rediriger toutes les autres requêtes vers index.html
+/*        /index.html   200
