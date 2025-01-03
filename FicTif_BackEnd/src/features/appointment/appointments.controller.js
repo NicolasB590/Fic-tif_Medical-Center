@@ -1,4 +1,5 @@
 import * as appointmentService from "./appointments.service.js";
+import * as usersService from "../users/users.service.js";
 import * as doctorService from "../doctors/doctors.service.js";
 import * as patientService from "../patients/patients.service.js";
 import { StatusCodes } from "http-status-codes";
@@ -82,8 +83,37 @@ const remove = async (req, res) => {
 
 // Récupère la liste des rendez-vous assignés à un utilisateur
 const getAllById = async (req, res) => {
-	const id = req.body.doctorId;
-	const appointments = await appointmentService.getAllById(id);
+	const id = req.user.id;
+	console.log(id);
+
+	if (!id) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Pas d'utilisateur renseigné" });
+	}
+
+	const user = await usersService.getById(id);
+
+	if (!user) {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Utilisateur inexistant" });
+	}
+
+	const role = user.role;
+	let speUser = "";
+
+	if (role === "patient") {
+		speUser = await patientService.get(id);
+	} else if (role === "doctor") {
+		speUser = await doctorService.get(id);
+	} else {
+		return res
+			.status(StatusCodes.NOT_FOUND)
+			.json({ msg: "Format de l'utilisateur invalide" });
+	}
+
+	const appointments = await appointmentService.getAllById(speUser._id);
 
 	if (!appointments) {
 		return res

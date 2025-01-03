@@ -4,6 +4,10 @@ const get = (email) => {
 	return User.findOne(email);
 };
 
+const getById = (id) => {
+	return User.findOne({ _id: id });
+};
+
 const getAllByOptions = async (options) => {
 	let query = {};
 
@@ -51,4 +55,4 @@ const isLogged = (email) => {
 	return User.findOne({ email }).select("-password");
 };
 
-export { get, update, remove, create, getAllByOptions, isLogged };
+export { get, update, remove, create, getAllByOptions, isLogged, getById };
