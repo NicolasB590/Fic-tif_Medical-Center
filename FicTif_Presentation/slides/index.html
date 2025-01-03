@@ -711,6 +711,8 @@ children: [
 							définir le menu latéral comme étant ouvert par défaut et
 							xl:max-w-screen-xl me permet de définir la largeur maximale du
 							conteneur lorsque la taille de l'écran est en xl ou plus. (1280px)
+							<br /><br />
+							<span>&gt;&gt; DROIT</span>
 						</aside>
 					</section>
 				</section>
@@ -732,6 +734,18 @@ const getAllSpecialities = async () => {
 };
 							</code>
 						</pre>
+						<aside class="notes">
+							La fonction getAllSpecialities permet de récupérer toutes les
+							spécialités des médecins en faisant un appel sur la route back
+							api/v1/doctors/specialities grâce à axios. apiClient est une
+							fonction custom que j'ai eu besoin de créer lors du déploiement de
+							mon application.
+							<br /><br />
+							const apiClient = axios.create({ baseURL:
+							import.meta.env.API_BASE_URL, });
+							<br /><br />
+							<span>&gt;&gt; BAS</span>
+						</aside>
 					</section>
 					<section>
 						<h3>Médecins par spécialité</h3>
@@ -749,6 +763,20 @@ const getDoctorsBySpeciality = async (speciality) => {
 };
 							</code>
 						</pre>
+						<aside class="notes">
+							Une fois une spécialité de selectionné, la fonction
+							getDoctorsBySpeciality est appelée permettant de récupérer tous
+							les docteurs ayant comme spécialité celle choisi par
+							l'utilisateur.
+							<br /><br />
+							Je n'ai pas encore géré les éventuelles erreurs qui peuvent
+							survenir lors des appels vers le back pour ses routes. La
+							fonctionnalité de prise de rendez-vous étant la première que j'ai
+							implémenté, ma logique autour de la gestion d'erreur n'était pas
+							encore très rôdé.
+							<br /><br />
+							<span>&gt;&gt; BAS</span>
+						</aside>
 					</section>
 					<section>
 						<h3>Modale de confirmation</h3>
@@ -785,6 +813,17 @@ if (user) {
 }
 							</code>
 						</pre>
+						<aside class="notes">
+							Une fois que l'utilisateur a choisi le médecin avec qui prendre
+							rendez-vous, il choisi un créneau horaire dans le calendrier (Qui
+							est lui réalisé avec React Big Calendar) et une modale de
+							confirmation apparait. Récapitulant les informations du
+							rendez-vous
+							<br /><br />
+							Patient / Médecin / Date et heure
+							<br /><br />
+							<span>&gt;&gt; BAS</span>
+						</aside>
 					</section>
 					<section>
 						<h3>Action de prise de Rendez-vous</h3>
@@ -819,6 +858,27 @@ export const action = async ({ request }) => {
 };
 							</code>
 						</pre>
+						<aside class="notes">
+							Une fois que l'utilisateur confirme son rendez-vous dans la
+							modale, la fonction action est appelée.
+							<br /><br />
+							Elle récupère les données envoyées à la soumission du formulaire
+							pour les stockées dans des variables nommées pour plus de
+							facilité, ensuite un appel vers /api/v1/appointments en méthode
+							POST permet de créer le rendez-vous et un toast de réussite permet
+							d'informer l'utilisateur que son rendez-vous à bien été pris au
+							même moment qu'il est redirigé vers l'accueil.
+							<br /><br />
+							C'est notamment avec cette fonction que j'ai entammé ma logique de
+							toast pour informé l'utilisateur des résultats de ses actions. Car
+							en effet, j'utilise de nombreuses redirection dans mon application
+							suite à des actions de l'utilisateur, de ce fait un message
+							informatif présent sur la page n'a pas de sens et la redirection
+							vers une page d'erreur n'est pratique que dans le cas d'erreur et
+							non de succés.
+							<br /><br />
+							<span>&gt;&gt; DROIT</span>
+						</aside>
 					</section>
 				</section>
 
@@ -831,6 +891,27 @@ export const action = async ({ request }) => {
 						<li class="fragment">Recherche de médecin</li>
 						<li class="fragment">Génération d'avatar</li>
 					</ul>
+					<aside class="notes">
+						J'ai également réaliser d'autres fonctionnalités dans l'application
+						que je ne peux pas détailler ici, manque de temps. Cependant je vais
+						vous les présenter rapidement:
+						<br /><br />
+						<span>BAS</span>
+						<br /><br />
+						Le système d'authentification qui gère les sessions utilisateur, la
+						connexion et la deconnexion.
+						<br /><br />
+						<span>BAS</span>
+						<br /><br />
+						<br /><br />
+						<span>BAS</span>
+						<br /><br />
+						<br /><br />
+						<span>BAS</span>
+						<br /><br />
+						<br /><br />
+						<span>&gt;&gt; DROIT</span>
+					</aside>
 				</section>
 
 				<!-- Démonstration -->
