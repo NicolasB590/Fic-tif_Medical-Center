@@ -22,12 +22,12 @@ const create = (data) => {
 	return Appointment(data).save();
 };
 
-const getAllById = (id) => {
-	return Appointment.find({ id });
+const getAllByPatientId = (patientId) => {
+	return Appointment.find({ patientId });
 };
 
 const getAllByDoctorId = (doctorId) => {
 	return Appointment.find({ doctorId });
 };
 
-export { get, create, update, remove, getAllById, getAllByDoctorId };
+export { get, create, update, remove, getAllByPatientId, getAllByDoctorId };

@@ -102,23 +102,35 @@ const getAllById = async (req, res) => {
 
 	const role = user.role;
 	let speUser = "";
+	let appointments = "";
 
 	if (role === "patient") {
 		speUser = await patientService.get(id);
-		console.log(speUser);
+
+		if (!Array.isArray(speUser) || speUser.length === 0 || !speUser[0]._id) {
+			return res
+				.status(StatusCodes.NOT_FOUND)
+				.json({ msg: "Patient introuvable" });
+		}
+
+		appointments = await appointmentService.getAllByPatientId(speUser[0]._id);
 	} else if (role === "doctor") {
 		speUser = await doctorService.getByUserId(id);
-		console.log(speUser);
+
+		if (!Array.isArray(speUser) || speUser.length === 0 || !speUser[0]._id) {
+			return res
+				.status(StatusCodes.NOT_FOUND)
+				.json({ msg: "Médecin introuvable" });
+		}
+
+		appointments = await appointmentService.getAllByDoctorId(speUser[0]._id);
 	} else {
 		return res
 			.status(StatusCodes.NOT_FOUND)
 			.json({ msg: "Format de l'utilisateur invalide" });
 	}
-	console.log(`ID de l'utilisateur : ${speUser.id}`);
 
-	const appointments = await appointmentService.getAllById(speUser.id);
-
-	if (!appointments) {
+	if (!appointments || appointments === "") {
 		return res
 			.status(StatusCodes.NOT_FOUND)
 			.json({ msg: "Aucun rendez-vous n'a été trouvé" });
