@@ -113,7 +113,7 @@ const getAllById = async (req, res) => {
 				.json({ msg: "Patient introuvable" });
 		}
 
-		appointments = await appointmentService.getAllByPatientId(speUser[0]._id);
+		appointments = await appointmentService.getAllByPatientId(speUser[0].user);
 	} else if (role === "doctor") {
 		speUser = await doctorService.getByUserId(id);
 

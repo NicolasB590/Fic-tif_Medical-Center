@@ -50,7 +50,6 @@ const groupAppointmentsByWeek = (appointments) => {
 const getAppointments = async () => {
   try {
     const response = await apiClient.post("/api/v1/appointments/user");
-    console.log(response.data.appointments);
     return Array.isArray(response.data.appointments)
       ? response.data.appointments
       : [];
