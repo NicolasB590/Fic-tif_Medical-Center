@@ -43,6 +43,15 @@ export const action = async ({ request }) => {
     phone,
   } = Object.fromEntries(formData);
 
+  const birthDate = new Date(year, month - 1, day);
+
+  const currentDate = new Date();
+
+  if (birthDate > currentDate) {
+    toast.error("La date de naissance ne peut pas être dans le futur.");
+    return null;
+  }
+
   try {
     const { data } = await apiClient.post("/api/v1/auth/register/patient", {
       birthDate: `${month}/${day}/${year}`,
