@@ -65,7 +65,10 @@ const Appointment = () => {
       const { data } = await apiClient.get("/api/v1/doctors/specialities");
       setSpecialities(data.specialities);
     } catch (error) {
-      console.log(error);
+      const errorMessage =
+        error.response?.data?.msg ||
+        "Erreur lors de la récupération des types de consultation";
+      toast.error(errorMessage);
     }
   };
 
@@ -76,7 +79,10 @@ const Appointment = () => {
       });
       return data.doctors;
     } catch (error) {
-      console.log(error);
+      const errorMessage =
+        error.response?.data?.msg ||
+        "Erreur lors de la récupération des médecins";
+      toast.error(errorMessage);
     }
   };
 
