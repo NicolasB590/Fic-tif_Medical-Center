@@ -152,6 +152,12 @@ const UserProfile = ({ type }) => {
                   <dt className="self-center font-bold">
                     {"Date de naissance : "}
                   </dt>
+                ) : field === "address" ? (
+                  <dt className="self-center font-bold">{"Adresse : "}</dt>
+                ) : field === "phoneNumber" ? (
+                  <dt className="self-center font-bold">
+                    {"Numéro de téléphone : "}
+                  </dt>
                 ) : (
                   <dt className="self-center font-bold">
                     {field.charAt(0).toUpperCase() + field.slice(1) + ` : `}

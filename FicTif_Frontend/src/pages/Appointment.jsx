@@ -192,7 +192,10 @@ const Appointment = () => {
 
       setCurrentDoctor(data.doctors);
     } catch (error) {
-      console.log(error);
+      const errorMessage =
+        error.response?.data?.msg ||
+        "Erreur lors de la récupération des informations du médecin";
+      toast.error(errorMessage);
     }
   };
 
